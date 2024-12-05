@@ -4,9 +4,12 @@ from django.db import models
 
 class Admin(models.Model):
     id_admin = models.AutoField(primary_key=True) 
-    fullname_admin = models.CharField(max_length=20)
+    fullname = models.CharField(max_length=50)
     address = models.CharField(max_length=255)
     date_of_inscription = models.DateField()
+
+    class Meta:
+        db_table = "Admin"
     
     
     def __str__(self):
