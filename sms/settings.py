@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'student',
+    'Admin',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,10 @@ DATABASES = {
         'PASSWORD': 'Django1234',
         'HOST': 'localhost',  # or the server IP if remote
         'PORT': '5432',
+        'USER': 'miriambenali',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
 
