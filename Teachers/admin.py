@@ -3,4 +3,6 @@
 from django.contrib import admin
 from .models import Teacher
 
-admin.site.register(Teacher)
+@admin.register(Teacher)
+class TeacherAdmin(admin.ModelAdmin):
+    list_display = ('id_teacher', 'fullname', 'adress', 'date_of_inscription')
