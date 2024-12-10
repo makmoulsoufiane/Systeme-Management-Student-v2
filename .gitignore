@@ -1,2 +1,3 @@
 myvenv
 sms/__pycache__
+echo ".env" >> .gitignore
