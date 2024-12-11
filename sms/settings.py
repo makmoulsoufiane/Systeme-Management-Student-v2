@@ -86,7 +86,8 @@ DATABASES = {
 }
 '''
 
-from decouple import config
+from decouple import config # type: ignore
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
