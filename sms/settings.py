@@ -81,16 +81,19 @@ WSGI_APPLICATION = 'sms.wsgi.application'
 #     }
 # }
 
+from decouple import config
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'systeme_management_student',
-        'USER': 'soufianemakmoul',
-        'PASSWORD': 'Django1234',
-        'HOST': 'localhost',  # or the server IP if remote
-        'PORT': '5432',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
+
 
 
 # Password validation
