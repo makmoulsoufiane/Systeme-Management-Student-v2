@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Admin',
-]
+    'Teachers.apps.TeachersConfig',
+    'student',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,20 +74,16 @@ WSGI_APPLICATION = 'sms.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'systeme_management_student',
-        'USER': 'miriambenali',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '5433',
-    }
-}
-'''
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 from decouple import config
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -97,6 +94,7 @@ DATABASES = {
         'PORT': config('DB_PORT', default='5432'),
     }
 }
+
 
 
 # Password validation
