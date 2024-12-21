@@ -3,6 +3,7 @@ mini_project_SMS\Systeme-Management-Student-v2\venv
 mini_project_SMS\Systeme-Management-Student-v2\.env
 venv
 .env
+<<<<<<< HEAD
 __pycache__
 mini_project_SMS\Systeme-Management-Student-v2\sms\__pycache__
 mini_project_SMS\Systeme-Management-Student-v2\Scores\__pycache__
@@ -10,3 +11,6 @@ mini_project_SMS\Systeme-Management-Student-v2\Scores\__pycache__
 __pycache__/
 
 mini_project_SMS\Systeme-Management-Student-v2\Teachers\__pycache__
+=======
+exam/__pycache__
+>>>>>>> 9bfab981bbef0eef5003b1e64f499b8fbbb41737
