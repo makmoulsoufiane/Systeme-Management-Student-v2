@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'student',
     'Admin',
     'Exam',
+    'Scores'
     ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
