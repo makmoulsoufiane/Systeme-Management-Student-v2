@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'Teachers.apps.TeachersConfig',
     'student',
     'Admin',
+    'Scores'
     ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
