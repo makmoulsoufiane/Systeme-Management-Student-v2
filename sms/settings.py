@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Teachers.apps.TeachersConfig',
     'student',
     'Admin',
+    'exam',
     ]
 
 MIDDLEWARE = [
