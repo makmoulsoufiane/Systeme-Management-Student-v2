@@ -1,5 +1,15 @@
 myvenv
 mini_project_SMS\Systeme-Management-Student-v2\venv
-env/
-sms/__pycache__
+mini_project_SMS\Systeme-Management-Student-v2\.env
+venv
 .env
+__pycache__
+mini_project_SMS\Systeme-Management-Student-v2\sms\__pycache__
+mini_project_SMS\Systeme-Management-Student-v2\Scores\__pycache__
+
+__pycache__/
+
+mini_project_SMS\Systeme-Management-Student-v2\Teachers\__pycache__
+exam/__pycache__
+env
+
