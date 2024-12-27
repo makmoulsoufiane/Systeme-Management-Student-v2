@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'student',
     'Admin',
     'exam',
-    'Scores'
+    'Scores',
     'Group',
     ]
 
