@@ -1,6 +1,6 @@
 # Group/models.py
 from django.db import models
-from student.models import Student
+from Teachers.models import Teacher
 from Admin.models import Admin
 
 
@@ -8,8 +8,9 @@ from Admin.models import Admin
 class Group(models.Model):
     id_group = models.AutoField(primary_key=True)
     year_of_creation = models.PositiveIntegerField()
-    students = models.ManyToManyField(Student, related_name='groups')
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='groups')
+    teacher = models.OneToOneField(Teacher, on_delete=models.CASCADE, related_name='group')
+
 
     # علاقة Many-to-Many مع الطلاب (طالب يمكن أن ينتمي إلى عدة مجموعات)
 
