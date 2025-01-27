@@ -1,5 +1,6 @@
 from django.db import models
 from Admin.models import Admin
+from Group.models import Group
 
 class Student(models.Model):
     id_student = models.AutoField(primary_key=True)
