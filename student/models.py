@@ -8,7 +8,7 @@ class Student(models.Model):
     address = models.CharField(max_length=255)
     date_of_inscription = models.DateField()  # Using 'date_of_inscription' as per your request
     admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='students')
-    group = models.ForeignKey('Group', on_delete=models.CASCADE, related_name='students')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='students')
 
     class Meta:
         db_table = "student"  # تحديد اسم الجدول في قاعدة البيانات
