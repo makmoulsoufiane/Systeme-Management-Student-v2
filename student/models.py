@@ -16,4 +16,4 @@ class Student(models.Model):
 
 
     def __str__(self):
-        return self.fullname
+        return f"{self.id_student}, {self.fullname}, {self.address}, {self.date_of_inscription}, {self.group}"

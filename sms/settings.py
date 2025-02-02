@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'exam',
     'Scores',
     'Group',
+    'student_exam',
     ]
 
 
