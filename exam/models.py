@@ -4,7 +4,7 @@ from Group.models import Group
 
 # Create your models here.
 
-class exam(models.Model):
+class Exam(models.Model):
     id_exam = models.AutoField(primary_key=True) 
     date_hour = models.DateTimeField()
     place = models.CharField(max_length=50)
