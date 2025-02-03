@@ -1,5 +1,6 @@
 from django.db import models
 from Teachers.models import Teacher
+from Group.models import Group
 
 # Create your models here.
 
@@ -9,7 +10,7 @@ class exam(models.Model):
     place = models.CharField(max_length=50)
     name = models.CharField(max_length=255)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='exams')
-    group = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='exams')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='exams')
 
 
     class Meta:
