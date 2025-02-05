@@ -7,7 +7,7 @@ class Teacher(models.Model):
     fullname = models.CharField(max_length=100)
     adress = models.CharField(max_length=255)
     date_of_inscription = models.DateField()
-    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='teachers' , default= 1)  
+    admin = models.ForeignKey(Admin, on_delete=models.CASCADE, related_name='teachers' , null=True, blank=True)  
 
     def __str__(self):
         return self.fullname
