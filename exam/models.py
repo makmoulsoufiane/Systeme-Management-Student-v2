@@ -9,8 +9,8 @@ class Exam(models.Model):
     date_hour = models.DateTimeField()
     place = models.CharField(max_length=50)
     name = models.CharField(max_length=255)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='exams', default= 1)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='exams', default= 1)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='exams', null=True, blank=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='exams', null=True, blank=True)
 
 
     class Meta:
