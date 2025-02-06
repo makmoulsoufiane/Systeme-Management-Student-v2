@@ -1,5 +1,6 @@
 from django.db import models
-from Admin.models import Admin  # Importing Admin model for the relationship
+from Admin.models import Admin 
+
 
 
 class Teacher(models.Model):
@@ -10,5 +11,8 @@ class Teacher(models.Model):
     admin = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True, related_name="managed_teachers")  # Admin managing the teacher
 
 
+
     def __str__(self):
         return self.fullname
+
+
