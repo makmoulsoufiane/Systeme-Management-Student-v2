@@ -16,4 +16,4 @@ class StudentExam(models.Model):
         unique_together = ('student', 'exam')  # Prevent duplicate entries
 
     def __str__(self):
-        return f"{self.student.name} - {self.exam.title} ({self.score})"
+        return f"{self.student} - {self.exam.name} ({self.score})"
