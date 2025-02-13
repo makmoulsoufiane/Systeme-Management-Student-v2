@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='student',
             name='group',
-            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, related_name='students', to='Group.group'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='students', to='Group.group'),
             preserve_default=False,
         ),
     ]
