@@ -5,3 +5,10 @@
     <h3>{{ student }}</h3>
 
   {% endfor %}
+
+
+  <ul>
+    {% for student in student_list %}
+      <li><a href="{% url 'student_detail' student.pk %}">{{ student }}</a></li>
+    {% endfor %}
+  </ul>
