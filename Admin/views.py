@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+from .models import Admin
 
-# Create your views here.
+class AdminListView(ListView):
+    model = Admin
+    
+
+class AdminDetailView(DetailView):
+    model = Admin
