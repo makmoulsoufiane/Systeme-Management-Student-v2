@@ -7,5 +7,11 @@
 <h3>{{student.date_of_inscription}} Date Of Inscrpition</h3>
 
 
-<h2> Group and Exam Details Section </h2>
-<h2> my scores </h2>
+<h2>Exams and Scores</h2>
+<ul>
+  {% for student_exam in student.studentexam_set.all %}
+    <li>
+      Exam: {{ student_exam.exam }} - Score: {{ student_exam.score }}
+    </li>
+  {% endfor %}
+</ul>
