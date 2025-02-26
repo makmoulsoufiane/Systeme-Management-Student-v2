@@ -1,14 +1,33 @@
-<h1> Dachborad all students for admin </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - All Students</title>
+</head>
+<body>
+  <header>
+    <h1>Dashboard - All Students for Admin</h1>
+  </header>
 
+  <main>
+    <section>
+      <h2>Student List</h2>
+      <ul>
+        {% for student in student_list %}
+          <li>{{ student }}</li>
+        {% endfor %}
+      </ul>
+    </section>
 
-  {% for student in student_list %}
-    <h3>{{ student }}</h3>
-
-  {% endfor %}
-
-
-  <ul>
-    {% for student in student_list %}
-      <li><a href="{% url 'student_detail' student.pk %}">{{ student }}</a></li>
-    {% endfor %}
-  </ul>
+    <section>
+      <h2>Student Details</h2>
+      <ul>
+        {% for student in student_list %}
+          <li><a href="{% url 'student_detail' student.pk %}">{{ student }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
