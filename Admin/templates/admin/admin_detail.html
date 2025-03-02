@@ -1,1 +1,14 @@
-<h1>Test2</h1>
+<h1>Admin Details</h1>
+
+<p><strong>Full Name:</strong> {{ admin.fullname }}</p>
+<p><strong>Address:</strong> {{ admin.address }}</p>
+<p><strong>Date of Inscription:</strong> {{ admin.date_of_inscription }}</p>
+
+<a href="{% url 'admin_update' admin.pk %}">Edit</a> |
+<a href="{% url 'admin_delete' admin.pk %}">Delete</a> |
+<a href="{% url 'admin_list' %}">Back to List</a>
+
+
+
+
+

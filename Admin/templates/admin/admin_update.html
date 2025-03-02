@@ -1,0 +1,11 @@
+<h1>Update Admin</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  
+
+    <button type="submit">Update</button>
+</form>
+
+<a href="{% url 'admin_detail' admin.pk %}">Cancel</a> |
+<a href="{% url 'admin_list' %}">Back to List</a>
