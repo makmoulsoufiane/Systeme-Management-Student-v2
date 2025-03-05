@@ -1,1 +1,29 @@
-<h1>Test</h1>
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Create Admin</h2>
+
+    
+    <form method="post" >
+      {% csrf_token %}
+      
+      <div class="name">
+        <label for="id_fullname" class="form-label">Full Name</label>
+        {{ form.fullname }}
+      </div>
+
+      <div class="adress">
+        <label for="id_address" class="form-label">Address</label>
+        {{ form.address }}
+      </div>
+
+      <div class="date">
+        <label for="id_date_of_inscription" class="form-label">Date of Inscription</label>
+        {{ form.date_of_inscription }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">Create Admin</button>
+      <button type="submit" class="btn btn-primary">Cancel</button>
+    </form>
+  </div>
+{% endblock %}
