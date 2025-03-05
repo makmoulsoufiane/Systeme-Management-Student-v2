@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if object %}Edit Exam{% else %}Add Exam{% endif %}</title>
+</head>
+<body>
+    <h1>{% if object %}Edit Exam{% else %}Add Exam{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    {% if object %}
+    <a href="{% url 'teacher_detail' object.teacher.id_teacher %}">Cancel</a>
+    {% else %}
+    <a href="{% url 'teacher_detail' teacher_id %}">Cancel</a>
+    {% endif %}
+    
+</body>
+</html>

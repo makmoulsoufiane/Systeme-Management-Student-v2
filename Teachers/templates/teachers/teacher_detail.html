@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,31 @@
     <p><strong>Name:</strong> {{ teacher.fullname }}</p>
     <p><strong>Address:</strong> {{ teacher.adress }}</p>
     <p><strong>Date of Inscription:</strong> {{ teacher.date_of_inscription }}</p>
+
+    <h2>Scores</h2>
+    <a href="{% url 'add_score' teacher.id_teacher %}">Add Score</a>
+    <ul>
+        {% for score in teacher.scores_added.all %}
+            <li>
+                {{ score.student.fullname }} - {{ score.note }}
+                <a href="{% url 'update_score' score.pk %}">Edit</a> |
+                <a href="{% url 'delete_score' score.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Exams</h2>
+    <a href="{% url 'add_exam' teacher.id_teacher %}">Add Exam</a>
+    <ul>
+        {% for exam in teacher.exams.all %}
+            <li>
+                {{ exam.name }} - {{ exam.date_hour }} - {{ exam.place }}
+                <a href="{% url 'update_exam' exam.pk %}">Edit</a> |
+                <a href="{% url 'delete_exam' exam.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
     <a href="{% url 'teacher_list' %}">Back to Teacher List</a>
 </body>
 </html>
