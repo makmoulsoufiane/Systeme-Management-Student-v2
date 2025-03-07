@@ -15,22 +15,35 @@
   <div class="container mt-4">
     <section>
       <h2 class="text-center">Student Information</h2>
-      <div class="row mt-4">
-        <div class="col-md-6">
-          <p><strong>ID:</strong> {{student.id_student}}</p>
-        </div>
-        <div class="col-md-6">
-          <p><strong>Full Name:</strong> {{student.fullname}}</p>
-        </div>
-        <div class="col-md-6">
-          <p><strong>Group:</strong> {{student.group.name}}</p>
-        </div>
-        <div class="col-md-6">
-          <p><strong>Date Of Inscription:</strong> {{student.date_of_inscription}}</p>
-        </div>
-        <div class="col-md-6">
-          <p><strong>Admin:</strong> {{student.admin}}</p>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tbody>
+        <tr>
+          <th>ID</th>
+          <td>{{student.id_student}}</td>
+        </tr>
+        <tr>
+          <th>Full Name</th>
+          <td>{{student.fullname}}</td>
+        </tr>
+        <tr>
+          <th>Address</th>
+          <td>{{student.address}}</td>
+        </tr>
+        <tr>
+          <th>Group</th>
+          <td>{{student.group.name}}</td>
+        </tr>
+        <tr>
+          <th>Date Of Inscription</th>
+          <td>{{student.date_of_inscription}}</td>
+        </tr>
+        <tr>
+          <th>Admin</th>
+          <td>{{student.admin}}</td>
+        </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
