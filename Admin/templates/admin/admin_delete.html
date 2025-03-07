@@ -1,1 +1,14 @@
-<h1>Test22</h1>
+
+{% block content %}
+  <div>
+    <h2>Delete Admin</h2>
+
+    <p>Are you sure you want to delete the admin "<strong>{{ admin.fullname }}</strong>"?</p>
+
+    <form method="post">
+      {% csrf_token %}   
+        <button type="submit">Yes, Delete</button>
+        <a href="{% url 'admin_list' %}" button type="cancel">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
