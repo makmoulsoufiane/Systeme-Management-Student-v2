@@ -26,23 +26,34 @@
           <p><strong>Group:</strong> {{student.group.name}}</p>
         </div>
         <div class="col-md-6">
-          <p><strong>Admin:</strong> {{student.admin}}</p>
+          <p><strong>Date Of Inscription:</strong> {{student.date_of_inscription}}</p>
         </div>
         <div class="col-md-6">
-          <p><strong>Date Of Inscription:</strong> {{student.date_of_inscription}}</p>
+          <p><strong>Admin:</strong> {{student.admin}}</p>
         </div>
       </div>
     </section>
 
     <section class="mt-4">
-      <h2>Exams and Scores</h2>
-      <ul class="list-group">
+      <h2 class="text-center">Exams and Scores</h2>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+        <tr>
+          <th scope="col">Exam</th>
+          <th scope="col">Score</th>
+        </tr>
+          </thead>
+          <tbody>
         {% for student_exam in student.studentexam_set.all %}
-          <li class="list-group-item">
-            <strong>Exam:</strong> {{ student_exam.exam }} - <strong>Score:</strong> {{ student_exam.score }}
-          </li>
+          <tr>
+            <td>{{ student_exam.exam }}</td>
+            <td>{{ student_exam.score }}</td>
+          </tr>
         {% endfor %}
-      </ul>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section class="mt-4">

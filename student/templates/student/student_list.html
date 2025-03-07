@@ -14,7 +14,7 @@
 
   <main class="container mt-4">
     <section>
-      <h2>Student List</h2>
+      <h2 class="text-center">Student List</h2>
       <ul class="list-group">
         {% for student in student_list %}
           <li class="list-group-item">{{ student }}</li>
@@ -23,13 +23,13 @@
     </section>
 
     <section class="mt-4">
-      <h2>Student Details</h2>
+      <h2 class="text-center">Student Details</h2>
       <div class="row">
       {% for student in student_list %}
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ student.id_student }} - {{ student.fullname }}</h5>
+                <h5 class="card-title">{{ student.id_student }} - </h5>
               <p class="card-text">Address: {{ student.address }}</p>
               <p class="card-text">Date of Inscription: {{ student.date_of_inscription }}</p>
               <p class="card-text">Group: {{ student.group }}</p>
