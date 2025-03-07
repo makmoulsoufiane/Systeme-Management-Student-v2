@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,26 +27,28 @@
       <h2 class="text-center">Student Details</h2>
       <div class="row">
       {% for student in student_list %}
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ student.id_student }} - {{ student.fullname }}</h5>
-              <p class="card-text">Address: {{ student.address }}</p>
-              <p class="card-text">Date of Inscription: {{ student.date_of_inscription }}</p>
-              <p class="card-text">Group: {{ student.group }}</p>
-              <p class="card-text">Admin: {{ student.admin }}</p>
-              <a href="{% url 'student_detail' student.pk %}" class="btn btn-primary">View Details</a>
-            </div>
-          </div>
+      <div class="col-md-4 mb-4">
+        <a href="{% url 'student_detail' student.pk %}" class="card student-card text-decoration-none text-dark">
+        <div class="card-body">
+          <h5 class="card-title">{{ student.id_student }} - {{ student.fullname }}</h5>
+          <p class="card-text">Address: {{ student.address }}</p>
+          <p class="card-text">Date of Inscription: {{ student.date_of_inscription }}</p>
+          <p class="card-text">Group: {{ student.group }}</p>
+          <p class="card-text">Admin: {{ student.admin }}</p>
+          <span class="student-btn btn btn-primary">View Details</span>
         </div>
+        </a>
+      </div>
       {% endfor %}
       </div>
     </section>
   </main>
 
   <!-- Bootstrap JS and dependencies -->
+
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="{% static 'js/student.js' %}"></script>
 </body>
 </html>
+<script src="{% static 'js/student.js' %}"></script>
