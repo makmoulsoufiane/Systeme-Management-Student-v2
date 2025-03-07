@@ -4,35 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Profile Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>Student Profile Page</h1>
+  <header class="bg-primary text-white text-center py-3">
+    <h1 class="text-center">Student Profile Page</h1>
   </header>
 
-  <section>
-    <h2>Student Information</h2>
-    <p><strong>ID:</strong> {{student.id_student}}</p>
-    <p><strong>Full Name:</strong> {{student.fullname}}</p>
-    <p><strong>Group:</strong> {{student.group.name}}</p>
-    <p><strong>Admin:</strong> {{student.admin}}</p>
-    <p><strong>Date Of Inscription:</strong> {{student.date_of_inscription}}</p>
-  </section>
+  <div class="container mt-4">
+    <section>
+      <h2 class="text-center">Student Information</h2>
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <p><strong>ID:</strong> {{student.id_student}}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Full Name:</strong> {{student.fullname}}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Group:</strong> {{student.group.name}}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Admin:</strong> {{student.admin}}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Date Of Inscription:</strong> {{student.date_of_inscription}}</p>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>Exams and Scores</h2>
-    <ul>
-      {% for student_exam in student.studentexam_set.all %}
-        <li>
-          <strong>Exam:</strong> {{ student_exam.exam }} - <strong>Score:</strong> {{ student_exam.score }}
-        </li>
-      {% endfor %}
-    </ul>
-  </section>
-  <section>
-    <a href="{% url 'student_list' %}">
-      <button>Back to Students List</button>
-    </a>
-  </section>
+    <section class="mt-4">
+      <h2>Exams and Scores</h2>
+      <ul class="list-group">
+        {% for student_exam in student.studentexam_set.all %}
+          <li class="list-group-item">
+            <strong>Exam:</strong> {{ student_exam.exam }} - <strong>Score:</strong> {{ student_exam.score }}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="mt-4">
+      <a href="{% url 'student_list' %}" class="btn btn-secondary">
+        Back to Students List
+      </a>
+    </section>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

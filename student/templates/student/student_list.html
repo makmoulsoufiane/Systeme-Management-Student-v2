@@ -4,30 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - All Students</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <header>
+  <header class="bg-primary text-white text-center py-3">
     <h1>Dashboard - All Students for Admin</h1>
   </header>
 
-  <main>
+  <main class="container mt-4">
     <section>
       <h2>Student List</h2>
-      <ul>
+      <ul class="list-group">
         {% for student in student_list %}
-          <li>{{ student }}</li>
+          <li class="list-group-item">{{ student }}</li>
         {% endfor %}
       </ul>
     </section>
 
-    <section>
+    <section class="mt-4">
       <h2>Student Details</h2>
-      <ul>
-        {% for student in student_list %}
-          <li><a href="{% url 'student_detail' student.pk %}">{{ student }}</a></li>
-        {% endfor %}
-      </ul>
+      <div class="row">
+      {% for student in student_list %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ student.id_student }} - {{ student.fullname }}</h5>
+              <p class="card-text">Address: {{ student.address }}</p>
+              <p class="card-text">Date of Inscription: {{ student.date_of_inscription }}</p>
+              <p class="card-text">Group: {{ student.group }}</p>
+              <p class="card-text">Admin: {{ student.admin }}</p>
+              <a href="{% url 'student_detail' student.pk %}" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
     </section>
   </main>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
