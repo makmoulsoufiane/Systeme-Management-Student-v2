@@ -28,7 +28,7 @@
       <div class="row">
       {% for student in student_list %}
       <div class="col-md-4 mb-4">
-        <a href="{% url 'student_detail' student.pk %}" class="card student-card text-decoration-none text-dark">
+        <a href="{% url 'student_detail' student.pk %}" class="card student-card text-decoration-none text-dark" data-url="{% url 'student_detail' student.pk %}">
         <div class="card-body">
           <h5 class="card-title">{{ student.id_student }} - {{ student.fullname }}</h5>
           <p class="card-text">Address: {{ student.address }}</p>
