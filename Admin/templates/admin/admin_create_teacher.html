@@ -1,11 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% block content %}
+  <div>
+    <h2>Create Teacher</h2>
+
     
-</body>
-</html>
+    <form method="post" >
+      {% csrf_token %}
+      
+      <div class="name">
+        <label for="id_fullname" >Full Name</label>
+        {{ form.fullname }}
+      </div>
+
+      <div class="adress">
+        <label for="id_address" >Address</label>
+        {{ form.address }}
+      </div>
+
+      <div class="date">
+        <label for="id_date_of_inscription" >Date of Inscription</label>
+        {{ form.date_of_inscription }}
+      </div>
+
+      <button type="submit" >Create Admin</button>
+      <button type="submit" >Cancel</button>
+    </form>
+  </div>
+{% endblock %}
