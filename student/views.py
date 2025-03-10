@@ -1,15 +1,8 @@
-from django.shortcuts import render
-from .models import Student  # Import the Student model
+# student/views.py
+from django.views.generic import DetailView
+from .models import Student
 
-# Create your views here.
-def student_list(request):
-    student_list = Student.objects.all()  # Complete the query to fetch all students
-    context = {'students' : student_list}
-    return render(request, 'student/student_list.html', context)  # Pass the student list to the template
-
-
-
-def student_detail(request, id_student):
-    student_detail = Student.objects.get(id_student=id_student)  # Complete the query to fetch all students
-    context = {'student' : student_detail}
-    return render(request, 'student/student_detail.html', context)  # Pass the student list to the template
+class StudentDetailView(DetailView):
+    model = Student
+    template_name = 'students/student_detail.html'
+    pk_url_kwarg = 'id_student'

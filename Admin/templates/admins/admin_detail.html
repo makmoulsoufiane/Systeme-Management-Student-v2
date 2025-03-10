@@ -1,0 +1,47 @@
+<!-- Admin/templates/Admin/admin_detail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Detail</title>
+    <style>
+        .student-list {
+            margin-top: 20px;
+        }
+        .student-item {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin: {{ admin.fullname }}</h1>
+    <p>ID: {{ admin.id_admin }}</p>
+
+    <!-- Form to create new student -->
+    <div>
+        <h2>Create New Student</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Create Student</button>
+        </form>
+    </div>
+
+    <!-- List of students created by this admin -->
+    <div class="student-list">
+        <h2>Students</h2>
+        {% if students %}
+            {% for student in students %}
+                <div class="student-item">
+                    <h3>{{ student.fullname }}</h3>
+                    <p>ID: {{ student.id_student }}</p>
+                    <a href="{% url 'student-detail' student.id_student %}">View Details</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No students yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

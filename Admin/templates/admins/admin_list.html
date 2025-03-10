@@ -1,0 +1,16 @@
+<!-- Admin/templates/Admin/admin_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin List</title>
+</head>
+<body>
+    <h1>Admins</h1>
+    <ul>
+        {% for admin in object_list %}
+            <li><a href="{% url 'admin-detail' admin.id_admin %}">{{ admin.fullname }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'admin-create' %}">Create New Admin</a>
+</body>
+</html>

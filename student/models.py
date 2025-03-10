@@ -1,5 +1,6 @@
 from django.db import models
 from Admin.models import Admin
+from django.urls import reverse
 from Group.models import Group
 
 class Student(models.Model):
@@ -17,3 +18,7 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.id_student}, {self.fullname}, {self.address}, {self.date_of_inscription}, {self.group}"
+
+
+    def get_absolute_url(self):
+        return reverse('student-detail', args=[str(self.id_student)])

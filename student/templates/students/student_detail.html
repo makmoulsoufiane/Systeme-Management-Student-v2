@@ -1,0 +1,13 @@
+<!-- student/templates/student/student_detail.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Detail</title>
+</head>
+<body>
+    <h1>Student: {{ student.fullname }}</h1>
+    <p>ID: {{ student.id_student }}</p>
+    <p>Admin: <a href="{% url 'admin-detail' student.admin.id_admin %}">{{ student.admin.fullname }}</a></p>
+    <a href="{% url 'admin-detail' student.admin.id_admin %}">Back to Admin</a>
+</body>
+</html>
