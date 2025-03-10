@@ -5,8 +5,11 @@
     <title>Student Detail</title>
 </head>
 <body>
-    <h1>Student: {{ student.fullname }}</h1>
-    <p>ID: {{ student.id_student }}</p>
+    <h1>Student: {{ student.id_student }}</h1>
+    <p>Full Name: {{ student.fullname }}</p>
+    <p>Address: {{ student.address }}</p>
+    <p>Date of Inscription: {{ student.date_of_inscription }}</p>
+    <p>Group: {{ student.group.name }}</p>
     <p>Admin: <a href="{% url 'admin-detail' student.admin.id_admin %}">{{ student.admin.fullname }}</a></p>
     <a href="{% url 'admin-detail' student.admin.id_admin %}">Back to Admin</a>
 </body>
