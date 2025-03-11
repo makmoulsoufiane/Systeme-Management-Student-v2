@@ -5,6 +5,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Admin
 from student.models import Student
 from Teachers.models import Teacher
+from pyexpat.errors import messages
+from django.contrib import messages
+
 
 class AdminListView(ListView):
     model = Admin
@@ -30,12 +33,15 @@ class AdminUpdateView(UpdateView):
     model = Admin
     fields = ['fullname', 'address', 'date_of_inscription']
     template_name = "Admin/admin_update.html"
+    success_url = reverse_lazy('admin_list')
+    
 
 
 class AdminDeleteView(DeleteView):
     model = Admin
     fields = ['fullname', 'address', 'date_of_inscription']
     template_name = "Admin/admin_delete.html"
+    success_url = reverse_lazy('admin_list')
 
 
 
