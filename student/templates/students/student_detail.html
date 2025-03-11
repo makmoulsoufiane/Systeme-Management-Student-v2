@@ -10,7 +10,5 @@
     <p>Address: {{ student.address }}</p>
     <p>Date of Inscription: {{ student.date_of_inscription }}</p>
     <p>Group: {{ student.group.name }}</p>
-    <p>Admin: <a href="{% url 'admin-detail' student.admin.id_admin %}">{{ student.admin.fullname }}</a></p>
-    <a href="{% url 'admin-detail' student.admin.id_admin %}">Back to Admin</a>
 </body>
 </html>
