@@ -1,14 +1,43 @@
 <!-- student/templates/student/student_detail.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Detail</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Detail</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      margin-top: 50px;
+    }
+    .card-header {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <h1>Student: {{ student.id_student }}</h1>
-    <p>Full Name: {{ student.fullname }}</p>
-    <p>Address: {{ student.address }}</p>
-    <p>Date of Inscription: {{ student.date_of_inscription }}</p>
-    <p>Group: {{ student.group.name }}</p>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2>Student Detail</h2>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Student ID: {{ student.id_student }}</h5>
+        <p class="card-text"><strong>Full Name:</strong> {{ student.fullname }}</p>
+        <p class="card-text"><strong>Address:</strong> {{ student.address }}</p>
+        <p class="card-text"><strong>Date of Inscription:</strong> {{ student.date_of_inscription }}</p>
+        <p class="card-text"><strong>Group:</strong> {{ student.group.name }}</p>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
