@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if object %}Edit Student{% else %}Add Student{% endif %}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if object %}Edit Student{% else %}Add Student{% endif %}</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>{% if object %}Edit Student{% else %}Add Student{% endif %}</h1>
+  <div class="container mt-5">
+    <h1 class="mb-4">{% if object %}Edit Student{% else %}Add Student{% endif %}</h1>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+    <form method="post" class="mb-3">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Save</button>
     </form>
     {% if object %}
-    <a href="{% url 'admin_detail' object.admin.id_admin %}">Cancel</a>
+    <a href="{% url 'admin_detail' object.admin.id_admin %}" class="btn btn-secondary">Cancel</a>
     {% else %}
-    <a href="{% url 'admin_detail' admin_id %}">Cancel</a>
+    <a href="{% url 'admin_detail' admin_id %}" class="btn btn-secondary">Cancel</a>
     {% endif %}
+  </div>
 
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

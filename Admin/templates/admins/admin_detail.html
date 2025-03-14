@@ -1,29 +1,59 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Details</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Details</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1> Admin Details</h1>
-    <p><strong>Name:</strong> {{ admin.fullname }}</p>
-    <p><strong>Address:</strong> {{ admin.address }}</p>
-    <p><strong>Date of Inscription:</strong> {{ admin.date_of_inscription }}</p>
-
-    <h2>Admin</h2>
-    <h2>Student</h2>
-    <a href="{% url 'add_student' admin.id_admin %}">Add Student</a>
-    <ul>
+  <div class="container mt-5">
+    <h1 class="mb-4 text-center">Dashboard Admin Detail</h1>
+    <div class="card text-center mb-4">
+      <div class="card-body">
+      <p><strong>ID:</strong> {{ admin.id_admin }}</p>
+      <p><strong>Full Name:</strong> {{ admin.fullname }}</p>
+      <p><strong>Address:</strong> {{ admin.address }}</p>
+      <p><strong>Date of Inscription:</strong> {{ admin.date_of_inscription }}</p>
+      </div>
+    </div>
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+    <h2>All Students Created by Admin</h2>
+    <a href="{% url 'add_student' admin.id_admin %}" class="btn btn-primary mb-3">Add Student</a>
+    <ul class="list-group">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Date of Birth</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for student in admin.students.all %}
-            {{ student.fullname }}
-          <a href="{% url 'update_student' student.pk %}">Edit</a> |
-          <a href="{% url 'delete_student' student.pk %}">Delete</a>
-      </li>
+        <tr>
+          <td>{{ student.id_student }}</td>
+          <td>{{ student.fullname }}</td>
+          <td>{{ student.address }}</td>
+          <td>{{ student.date_of_inscription}}</td>
+          <td>{{ student.group }}</td>
+          <td>
+          <a href="{% url 'update_student' student.pk %}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{% url 'delete_student' student.pk %}" class="btn btn-sm btn-danger">Delete</a>
+          </td>
+        </tr>
         {% endfor %}
+        </tbody>
+      </table>
     </ul>
-    <a href="{% url 'admin_list' %}">Back to Admin List</a>
+    <a href="{% url 'admin_list' %}" class="btn btn-secondary mt-3">Back to Admin List</a>
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-a
