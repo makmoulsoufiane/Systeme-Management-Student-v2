@@ -18,8 +18,17 @@
       </div>
     </div>
     <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-    <h2>All Students Created by Admin</h2>
-    <a href="{% url 'add_student' admin.id_admin %}" class="btn btn-primary mb-3">Add Student</a>
+    <h2 class="text-center">All Students Created by Admin</h2>
+    <div class="text-center mb-3">
+      <a href="{% url 'add_student' admin.id_admin %}" class="btn btn-primary px-4 py-3" style="transition: background-color 0.3s; border-radius: 20px;">
+      Add Student
+      </a>
+    </div>
+    <style>
+      .btn-primary:hover {
+      background-color: #0056b3;
+      }
+    </style>
     <ul class="list-group">
       <table class="table table-striped">
         <thead>
@@ -49,7 +58,13 @@
         </tbody>
       </table>
     </ul>
-    <a href="{% url 'admin_list' %}" class="btn btn-secondary mt-3">Back to Admin List</a>
+
+    <div class="text-center mb-3">
+      <a href="{% url 'admin_list' %}" class="btn btn-primary px-4 py-3" style="transition: background-color 0.3s; border-radius: 20px; margin: 10px;">
+      Back To Admin List
+      </a>
+    </div>
+    <style>
 
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
