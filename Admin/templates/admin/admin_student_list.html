@@ -1,0 +1,12 @@
+<h1>List of Students</h1>
+<ul>
+    {% for student in students %}
+        <li>
+            <a href="{% url 'admin_detail' student.pk %}">{{ student.fullname }}</a> - 
+            {{ student.address }} - 
+            {{ student.date_of_inscription }}
+        </li>
+    {% empty %}
+        <li>No students found.</li>
+    {% endfor %}
+</ul>

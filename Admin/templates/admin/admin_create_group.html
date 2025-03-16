@@ -1,0 +1,27 @@
+{% block content %}
+  <div>
+    <h2>Create Group</h2>
+
+    
+    <form method="post" >
+      {% csrf_token %}
+      
+      <div class="name">
+        <label for="id_group" >Name of Group</label>
+        {{ form.name }}
+      </div>
+      <br>
+
+
+      <div class="date">
+        <label for="year_of_creation" >Date of Creation</label>
+        {{ form.year_of_creation}}
+      </div>
+      <br>
+      <br>
+
+      <button type="submit" >Create Group</button>
+      <button type="submit" >Cancel</button>
+    </form>
+  </div>
+{% endblock %}

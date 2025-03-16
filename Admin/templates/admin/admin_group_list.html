@@ -1,0 +1,10 @@
+<h1>List of Groups</h1>
+<ul>
+    {% for group in list_group %}
+        <li>
+            <a href="{% url 'group_detail' group.pk %}">{{ group.name }}</a> - 
+            {{ group.name }} - 
+            {{ group.year_of_creation }}
+        </li>
+    {% endfor %}
+</ul>

@@ -1,4 +1,5 @@
-<h1>Admin Details</h1>
+<h1>Admin Dashboard</h1>
+
 
 <p><strong>Full Name:</strong> {{ admin.fullname }}</p>
 <p><strong>Address:</strong> {{ admin.address }}</p>
@@ -9,6 +10,15 @@
 <a href="{% url 'admin_list' %}">Back to List</a>
 
 
+<h2>All Student </h2>
+<a href="{% url 'add_student' %}">Add Student</a>
 
+
+<h2>All Teachers </h2>
+<a href="{% url 'add_teacher' %}">Add Teacher</a>
+
+
+<h2>All Groups </h2>
+<a href="{% url 'add_Group' %}">Add Group</a>
 
 

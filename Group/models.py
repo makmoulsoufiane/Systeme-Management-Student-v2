@@ -13,7 +13,7 @@ class Group(models.Model):
     teacher = models.OneToOneField(Teacher, on_delete=models.CASCADE, related_name='group', null=True, default=None)
 
 
-    # علاقة Many-to-Many مع الطلاب (طالب يمكن أن ينتمي إلى عدة مجموعات)
+    
 
     def __str__(self):
         return f"Group {self.id_group} - {self.year_of_creation}"
