@@ -12,7 +12,7 @@ from django.contrib import messages
 
 class AdminListView(ListView):
     model = Admin
-    
+
 
 class AdminDetailView(DetailView):
     model = Admin
@@ -24,11 +24,11 @@ class AdminCreateView(CreateView):
     model = Admin
     fields = ['fullname', 'address', 'date_of_inscription']
     template_name = "Admin/admin_create.html"
-    success_url = reverse_lazy('admin_list')  
+    success_url = reverse_lazy('admin_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Admin created successfully!")  
-        return super().form_valid(form) 
+        messages.success(self.request, "Admin created successfully!")
+        return super().form_valid(form)
 
 
 class AdminUpdateView(UpdateView):
@@ -36,7 +36,7 @@ class AdminUpdateView(UpdateView):
     fields = ['fullname', 'address', 'date_of_inscription']
     template_name = "Admin/admin_update.html"
     success_url = reverse_lazy('admin_list')
-    
+
 
 
 class AdminDeleteView(DeleteView):
@@ -48,41 +48,41 @@ class AdminDeleteView(DeleteView):
 
 class AdminListStudentView(ListView):
     model = Student
-    template_name = "Student/student_list.html"  
-    context_object_name = "students" 
+    template_name = "Student/student_list.html"
+    context_object_name = "students"
 
 class AdminCreateStudentView(CreateView):
-    model = Student  
-    fields = ['fullname', 'address', 'date_of_inscription'] 
+    model = Student
+    fields = ['fullname', 'address', 'date_of_inscription']
     template_name = "Admin/admin_create_student.html"
-    success_url = reverse_lazy('student_list') 
+    success_url = reverse_lazy('student_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Student created successfully!")  
+        messages.success(self.request, "Student created successfully!")
         return super().form_valid(form)
 
 
 class AdminCreateTeacherView(CreateView):
-    model = Teacher  
-    fields = ['fullname', 'adress', 'date_of_inscription'] 
+    model = Teacher
+    fields = ['fullname', 'adress', 'date_of_inscription']
     template_name = "Admin/admin_create_teacher.html"
-    success_url = reverse_lazy('teacher_list') 
+    success_url = reverse_lazy('teacher_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "Teacher created successfully!")  
+        messages.success(self.request, "Teacher created successfully!")
         return super().form_valid(form)
-    
+
 
 class AdminCreateGroupView(CreateView):
-    model = Group  
-    fields = ['name', 'teacher', 'year_of_creation'] 
+    model = Group
+    fields = ['name', 'teacher', 'year_of_creation']
     template_name = "Admin/admin_create_group.html"
-    success_url = reverse_lazy('group_list') 
+    success_url = reverse_lazy('group_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "The group created successfully!")  
+        messages.success(self.request, "The group created successfully!")
         return super().form_valid(form)
-    
+
 
 class AdminListGroupView(ListView):
     model = Group
