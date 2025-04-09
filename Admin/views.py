@@ -51,6 +51,11 @@ class AdminListStudentView(ListView):
     template_name = "Student/student_list.html"  
     context_object_name = "students" 
 
+class AdminStudentDetailsView(DetailView):
+    model = Student
+    template_name = "Student/student_details.html"  
+    context_object_name = "students" 
+
 class AdminCreateStudentView(CreateView):
     model = Student  
     fields = ['fullname', 'address', 'date_of_inscription'] 
@@ -73,16 +78,32 @@ class AdminCreateTeacherView(CreateView):
         return super().form_valid(form)
     
 
+class AdminTeacherListView(ListView):
+    model = Teacher
+    template_name = "admin/teacher_list.html"  
+    context_object_name = "teachers"
+
+class AdminTeacherDetailsView(DetailView):
+    model = Teacher
+    template_name = "admin/teacher_detail.html"  
+    context_object_name = "teachers" 
+
 class AdminCreateGroupView(CreateView):
     model = Group  
-    fields = ['name', 'teacher', 'year_of_creation'] 
-    template_name = "Admin/admin_create_group.html"
+    fields = ['name', 'group', 'year_of_creation'] 
+    template_name = "admin/admin_create_group.html"
     success_url = reverse_lazy('group_list') 
 
     def form_valid(self, form):
         messages.success(self.request, "The group created successfully!")  
         return super().form_valid(form)
     
-
 class AdminListGroupView(ListView):
     model = Group
+    template_name= "admin/group_list.html"
+    context_object_name = "groups" 
+
+class AdminDetailGroupView(DetailView):
+    model = Group
+    template_name= "admin/group_detail.html"
+    context_object_name = "groups" 
