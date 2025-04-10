@@ -15,17 +15,19 @@
 
 
 
-<a href="{% url 'student-details' %}">Student Details</a>
+<a href="{% url 'student_list' %}">Student List</a>
 
-<h2>Teachers </h2>
+{% comment %} <h2>Teachers </h2>
 <a href="{% url 'add_teacher' %}">Add Teacher</a>
-<a href="{% url 'teacher-list' %}"> Teacher List</a>
-<a href="{% url 'teacher-details' %}">Teacher Details</a>
+<a href="{% url 'teacher_list' %}"> Teacher List</a>
+<a href="{% url 'teacher_detail' %}">Teacher Details</a>
+<a href="{% url 'teacher_detail' teacher.pk %}">Teacher Details</a>
+{% endcomment %}
 
-
-<h2>Groups </h2>
+{% comment %} <h2>Groups </h2>
 <a href="{% url 'add_Group' %}">Add Group</a>
-<a href="{% url 'group-list' %}"> Group List</a>
-<a href="{% url 'group-detail' group.pk %}">Group Details</a>
-
-
+<a href="{% url 'group_list' %}"> Group List</a>
+<a href="{% url 'group_list' %}">Group List</a>
+<a href="{% url 'group_detail' %}">Group Details</a>
+<a href="{% url 'group_detail' group.pk %}">Group Details</a>
+{% endcomment %}

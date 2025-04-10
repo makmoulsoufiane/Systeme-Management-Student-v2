@@ -55,7 +55,7 @@ class AdminCreateStudentView(CreateView):
     model = Student
     fields = ['fullname', 'address', 'date_of_inscription']
     template_name = "Admin/admin_create_student.html"
-    success_url = reverse_lazy('student_list')
+    success_url = reverse_lazy('admin_list_student')  # Ensure this matches the correct URL pattern
 
     def form_valid(self, form):
         messages.success(self.request, "Student created successfully!")
