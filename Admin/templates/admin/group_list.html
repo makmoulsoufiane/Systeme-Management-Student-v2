@@ -2,7 +2,7 @@
 <ul>
     {% for group in list_group %}
         <li>
-            <a href="{% url 'group_detail' group.pk %}">{{ group.name }}</a> - 
+            <a href="{% url 'group-list' %}">{{ group.name }}</a> - 
             {{ group.name }} - 
             {{ group.year_of_creation }}
         </li>

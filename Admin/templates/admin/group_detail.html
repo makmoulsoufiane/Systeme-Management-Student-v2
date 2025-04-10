@@ -1,0 +1,10 @@
+<h2>Groups</h2>
+
+<ul>
+{% for group in groups %}
+    <li>
+        {{ group.name }}
+        <a href="{% url 'group-detail' group.pk %}">groupe details</a>
+    </li>
+{% endfor %}
+</ul>
