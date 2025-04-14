@@ -32,9 +32,28 @@
         <p class="card-text"><strong>Address:</strong> {{ student.address }}</p>
         <p class="card-text"><strong>Date of Inscription:</strong> {{ student.date_of_inscription }}</p>
         <p class="card-text"><strong>Group:</strong> {{ student.group.name }}</p>
+        <h5 class="mt-4">Scores:</h5>
+        <ul>
+          {% for student_exam in student.studentexam_set.all %}
+            <li>
+              <strong>Exam:</strong> {{ student_exam.exam.name }} -
+              <strong>Score:</strong> {{ student_exam.score|default:"N/A" }}
+                <br>
+                <strong>Place:</strong> {{ student_exam.exam.place }} -
+                <strong>Date:</strong> {{ student_exam.exam.date_hour|date:"F j, Y, g:i a" }}
+                <br>
+                <strong>Subject:</strong> {{ student_exam.exam.name }}
+            </li>
+          {% empty %}
+            <li>No exams available.</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   </div>
+
+
+
   <!-- Bootstrap JS and dependencies -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
