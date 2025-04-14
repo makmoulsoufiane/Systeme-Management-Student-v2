@@ -4,6 +4,7 @@ from django.urls import  reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import Admin
 from student.models import Student
+from Teachers.models import Teacher  # Import the Teacher model
 # from student.forms import StudentForm
 
 class AdminListView(ListView):
@@ -30,7 +31,7 @@ class StudentCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['admin_id'] = self.kwargs['admin_id']  # Send teacher_id to the template
+        context['admin_id'] = self.kwargs['admin_id']
         return context
 
     def get_success_url(self):
@@ -49,6 +50,45 @@ class StudentUpdateView(UpdateView):
 class StudentDeleteView(DeleteView):
     model = Student
     template_name = 'admins/student_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('admin_detail', kwargs={'pk': self.object.admin.id_admin})
+
+
+class TeacherCreateView(CreateView):
+    model = Teacher
+    fields = ['fullname','adress','date_of_inscription','admin']
+    template_name = "admins/teacher_form.html"
+
+    def form_valid(self, form):
+        admin_id = self.kwargs['admin_id']
+        admin = get_object_or_404(Admin, id_admin=admin_id)
+        form.instance.admin = admin
+        return super().form_valid(form)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['admin_id'] = self.kwargs['admin_id']
+        return context
+
+
+    def get_success_url(self):
+        return reverse_lazy('admin_detail', kwargs={'pk': self.kwargs['admin_id']})
+
+
+class TeacherUpdateView(UpdateView):
+    model = Teacher
+    fields = ['fullname', 'adress', 'date_of_inscription', 'admin']
+    template_name = "admins/teacher_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy('admin_detail', kwargs={'pk': self.object.admin.id_admin})
+
+
+class TeacherDeleteView(DeleteView):
+    model = Teacher
+    template_name = 'admins/teacher_confirm_delete.html'
 
     def get_success_url(self):
         return reverse_lazy('admin_detail', kwargs={'pk': self.object.admin.id_admin})
