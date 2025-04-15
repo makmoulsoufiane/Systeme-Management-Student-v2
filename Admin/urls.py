@@ -1,6 +1,6 @@
 # Admin/urls.py
 from django.urls import path
-from .views import (AdminListView, AdminDetailView, StudentCreateView, StudentUpdateView, StudentDeleteView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView)
+from .views import (AdminListView, AdminDetailView, StudentCreateView, StudentUpdateView, StudentDeleteView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, GroupCreateView, GroupUpdateView, GroupDeleteView)
 
 urlpatterns = [
     path('', AdminListView.as_view(), name='admin_list'),
@@ -14,5 +14,9 @@ urlpatterns = [
     path('update-teacher/<int:pk>/', TeacherUpdateView.as_view(), name='update_teacher'),
     path('delete-teacher/<int:pk>/', TeacherDeleteView.as_view(), name='delete_teacher'),
 
+    # Group URLs
+    path('<int:admin_id>/add-group/', GroupCreateView.as_view(), name='add_group'),
+    path('update-group/<int:pk>/', GroupUpdateView.as_view(), name='update_group'),
+    path('delete-group/<int:pk>/', GroupDeleteView.as_view(), name='delete_group'),
 
 ]

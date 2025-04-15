@@ -97,6 +97,47 @@
       </tbody>
     </table>
 
+
+
+
+    <h2 class="text-center">All Groups Created by Admin</h2>
+    <div class="text-center mb-3">
+      <a href="{% url 'add_group' admin.id_admin %}" class="btn btn-primary px-4 py-3" style="transition: background-color 0.3s; border-radius: 20px;">
+        Add Group
+      </a>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID Group</th>
+          <th>Name</th>
+          <th>Year of Creation</th>
+          <th>Admin</th>
+          <th>Teacher</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for group in admin.groups.all %}
+        <tr>
+          <td>{{ group.id_group }}</td>
+          <td>{{ group.name }}</td>
+          <td>{{ group.year_of_creation }}</td>
+          <td>{{ group.admin}}</td>
+          <td>{{ group.teacher.fullname}}</td>
+          <td>
+            <a href="{% url 'update_group' group.pk %}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="{% url 'delete_group' group.pk %}" class="btn btn-sm btn-danger">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center">No Group found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
     <div class="text-center mb-3">
       <a href="{% url 'admin_list' %}" class="btn btn-primary px-4 py-3" style="transition: background-color 0.3s; border-radius: 20px; margin: 10px;">
         Back To Admin List
