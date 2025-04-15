@@ -1,4 +1,3 @@
-<!-- student/templates/student/student_detail.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,57 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Detail</title>
   <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .card {
-      margin-top: 50px;
-    }
-    .card-header {
-      background-color: #007bff;
-      color: white;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <h2>Student Detail</h2>
-      </div>
+  <div class="container mt-5">
+    <h2 class="text-primary text-center">Dashboard Student Detail</h2>
+    <div class="card text-center">
       <div class="card-body">
         <h5 class="card-title">Student ID: {{ student.id_student }}</h5>
         <p class="card-text"><strong>Full Name:</strong> {{ student.fullname }}</p>
         <p class="card-text"><strong>Address:</strong> {{ student.address }}</p>
         <p class="card-text"><strong>Date of Inscription:</strong> {{ student.date_of_inscription }}</p>
         <p class="card-text"><strong>Group:</strong> {{ student.group.name }}</p>
-        <h5 class="mt-4">Scores:</h5>
-        <ul>
-          {% for student_exam in student.studentexam_set.all %}
-            <li>
-              <strong>Exam:</strong> {{ student_exam.exam.name }} -
-              <strong>Score:</strong> {{ student_exam.score|default:"N/A" }}
-                <br>
-                <strong>Place:</strong> {{ student_exam.exam.place }} -
-                <strong>Date:</strong> {{ student_exam.exam.date_hour|date:"F j, Y, g:i a" }}
-                <br>
-                <strong>Subject:</strong> {{ student_exam.exam.name }}
-            </li>
-          {% empty %}
-            <li>No exams available.</li>
-          {% endfor %}
-        </ul>
+      </div>
+    </div>
+    <hr style="border: 2px solid black; margin-top: 50px;">
+
+    <h5 class="mt-4 text-center"></h5>
+    <div class="row">
+      <div class="col-md-6">
+      <h5 class="text-center">Score Card</h5>
+      <ul class="list-group text-center">
+        {% for student_exam in student.studentexam_set.all %}
+        <li class="list-group-item">
+          <strong>Exam:</strong> {{ student_exam.exam.name }} -
+          <strong>Score:</strong> {{ student_exam.score|default:"N/A" }}
+        </li>
+        {% empty %}
+        <li class="list-group-item">No scores available.</li>
+        {% endfor %}
+      </ul>
+      </div>
+      <div class="col-md-6">
+      <h5 class="text-center">Exam Details</h5>
+      <ul class="list-group text-center">
+        {% for student_exam in student.studentexam_set.all %}
+        <li class="list-group-item">
+          <strong>Place:</strong> {{ student_exam.exam.place }}
+          <br>
+          <strong>Date:</strong> {{ student_exam.exam.date_hour|date:"F j, Y, g:i a" }}
+          <br>
+          <strong>Exam Name:</strong> {{ student_exam.exam.name }}
+        </li>
+        {% empty %}
+        <li class="list-group-item">No exam details available.</li>
+        {% endfor %}
+      </ul>
       </div>
     </div>
   </div>
-
-
-
-  <!-- Bootstrap JS and dependencies -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
