@@ -1,15 +1,21 @@
-from django.shortcuts import render
-from .models import Student  # Import the Student model
+# student/views.py
+from django.views.generic import DetailView
+from .models import Student
 
-# Create your views here.
-def student_list(request):
-    student_list = Student.objects.all()  # Complete the query to fetch all students
-    context = {'students' : student_list}
-    return render(request, 'student/student_list.html', context)  # Pass the student list to the template
+class StudentDetailView(DetailView):
+    model = Student
+    template_name = 'students/student_detail.html'
+    context_object_name = "student"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        student = self.object
 
+        # Get all scores with their related exam information
+        context['scores'] = student.scores.all().select_related('exam', 'teacher')
 
-def student_detail(request, id_student):
-    student_detail = Student.objects.get(id_student=id_student)  # Complete the query to fetch all students
-    context = {'student' : student_detail}
-    return render(request, 'student/student_detail.html', context)  # Pass the student list to the template
+        # Get all exams for the student's group
+        if hasattr(student, 'group'):
+            context['group_exams'] = student.group.exams.all().select_related('teacher')
+
+        return context

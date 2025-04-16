@@ -1,8 +1,8 @@
 
 # teachers/urls.py
 from django.urls import path
-from .views import (TeacherListView, TeacherDetailView, ScoreCreateView, ScoreUpdateView, ScoreDeleteView, 
-    ExamCreateView, ExamUpdateView, ExamDeleteView) 
+from .views import (TeacherListView, TeacherDetailView, ScoreCreateView, ScoreUpdateView, ScoreDeleteView,
+    ExamCreateView, ExamUpdateView, ExamDeleteView)
 
 urlpatterns = [
     path('', TeacherListView.as_view(), name='teacher_list'),
@@ -21,7 +21,7 @@ urlpatterns = [
 
 
 """from django.urls import path,include
-from . import views 
+from . import views
 
 
 urlpatterns = [
