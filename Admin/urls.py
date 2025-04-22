@@ -1,9 +1,15 @@
 # Admin/urls.py
 from django.urls import path
-from .views import (AdminListView, AdminDetailView, StudentCreateView, StudentUpdateView, StudentDeleteView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, GroupCreateView, GroupUpdateView, GroupDeleteView)
+from .views import (AdminListView, AdminDetailView, StudentCreateView, StudentUpdateView, StudentDeleteView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, GroupCreateView, GroupUpdateView, GroupDeleteView, HomePageView)
 
 urlpatterns = [
-    path('', AdminListView.as_view(), name='admin_list'),
+    #homePage url
+    path('', HomePageView.as_view(), name='home_page'),
+
+
+
+    # Admin URLs
+    path('/admins', AdminListView.as_view(), name='admin_list'),
     path('<int:pk>/', AdminDetailView.as_view(), name='admin_detail'),
     # Student URLs
     path('<int:admin_id>/add-student/', StudentCreateView.as_view(), name='add_student'),

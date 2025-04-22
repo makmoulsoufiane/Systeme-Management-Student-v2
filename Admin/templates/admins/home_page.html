@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page - Student Management System</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header>
+    <h1>Welcome to the Student Management System</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="/admin/login/">Login</a></li>
+      <li><a href="/admin/contact/">Contact</a></li>
+    </ul>
+  </nav>
+  <main>
+    <section class="banner">
+      <img src="{% static 'images/banner.jpg' %}" alt="Banner Image">
+      <h2>Empowering Education Management</h2>
+    </section>
+    <section>
+      <h2>System Overview</h2>
+      <p>This system helps administrators manage students, teachers, and other academic activities efficiently.</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2023 Student Management System. All rights reserved.</p>
+  </footer>
+</body>
+</html>

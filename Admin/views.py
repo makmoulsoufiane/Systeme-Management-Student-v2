@@ -4,9 +4,17 @@ from django.urls import  reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import Admin
 from student.models import Student
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views import View
 from Teachers.models import Teacher  # Import the Teacher model
 from student.models import Group  # Import the Group model
 # from student.forms import StudentForm
+
+
+class HomePageView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'admins/home_page.html')
 
 class AdminListView(ListView):
     model = Admin
