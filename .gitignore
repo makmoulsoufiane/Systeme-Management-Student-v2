@@ -8,6 +8,12 @@ mini_project_SMS\Systeme-Management-Student-v2\sms\__pycache__
 mini_project_SMS\Systeme-Management-Student-v2\Scores\__pycache__
 
 __pycache__/
+Teachers/__pycache__/models.cpython-312.pyc
+Teachers/__pycache__/admin.cpython-312.pyc
+Group/__pycache__/admin.cpython-312.pyc
+Admin/__pycache__/models.cpython-312.pyc
+student/__pycache__/models.cpython-312.pyc
+sms/__pycache__/urls.cpython-312.pyc
 
 mini_project_SMS\Systeme-Management-Student-v2\Teachers\__pycache__
 exam/__pycache__
