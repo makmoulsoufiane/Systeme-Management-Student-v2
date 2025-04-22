@@ -40,7 +40,7 @@ A full-stack web application for school management that handles:
 ## 🚀 Getting Started
 ```bash
 # Clone repository
-git clone https://github.com/your-repo/sms.git
+git clone https://github.com/Systeme-Management-Student-v2.git
 
 # Install dependencies
 pip install -r requirements.txt
