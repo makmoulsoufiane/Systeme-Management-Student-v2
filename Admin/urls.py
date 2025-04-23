@@ -4,10 +4,10 @@ from .views import (AdminListView, AdminDetailView, StudentCreateView, StudentUp
 
 urlpatterns = [
     #homePage url
-    path('', HomePageView.as_view(), name='home_page'),
+    #path('', HomePageView.as_view(), name='home_page'),
 
     # Admin URLs
-    path('admins', AdminListView.as_view(), name='admin_list'),
+    path('', AdminListView.as_view(), name='admin_list'),
     path('<int:pk>/', AdminDetailView.as_view(), name='admin_detail'),
     # Student URLs
     path('<int:admin_id>/add-student/', StudentCreateView.as_view(), name='add_student'),

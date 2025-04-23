@@ -19,7 +19,7 @@ from django.urls import path,include
 from Admin.views import HomePageView  # Replace 'my_app' with the actual app name where HomePageView is defined
 
 urlpatterns = [
-    path('', HomePageView.as_view(), name='home_page'),  # 👈 this fixes the 40
+    path('', HomePageView.as_view(), name='home_page'),
     path('admin/', admin.site.urls),
     path('admins/', include('Admin.urls')),
     path('students/', include('student.urls')),
