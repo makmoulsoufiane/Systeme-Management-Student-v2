@@ -1,4 +1,3 @@
-# Systeme-Management-Student-v2
 # Student Management System (SMS)
 
 ![Project Banner](https://via.placeholder.com/800x200?text=Student+Management+System) <!-- Add your actual banner image -->
