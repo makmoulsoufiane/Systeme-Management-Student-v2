@@ -1,34 +1,339 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page - Student Management System</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .jumbotron {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .stat-card .card-body {
+            padding: 1.5rem;
+        }
+        .action-card {
+            border-radius: 0.5rem;
+        }
+        .action-card .card-header {
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+        .list-group-item {
+            border: none;
+            padding: 1rem;
+        }
+        .list-group-item a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .list-group-item a:hover {
+            color: #0d6efd;
+        }
+        .list-group-item i {
+            width: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to the Student Management System</h1>
-  </header>
-  <nav>
-    <ul>
-      <li><a href="/admin/login/">Login</a></li>
-      <li><a href="/admin/contact/">Contact</a></li>
-    </ul>
-  </nav>
-  <main>
-    <section class="banner">
-      <img src="{% static 'images/banner.jpg' %}" alt="Banner Image">
-      <h2>Empowering Education Management</h2>
-    </section>
-    <section>
-      <h2>System Overview</h2>
-      <p>This system helps administrators manage students, teachers, and other academic activities efficiently.</p>
-    </section>
-  </main>
-  <footer>
-    <p>&copy; 2023 Student Management System. All rights reserved.</p>
-  </footer>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Student Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user me-1"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="jumbotron text-white mb-4">
+            <h1 class="display-4">Welcome to Student Management System</h1>
+            <p class="lead">Manage students, teachers, and groups efficiently</p>
+        </div>
+
+        <!-- Quick Stats Section -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card stat-card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Students</h5>
+                        <h2 class="display-4">{{ total_students }}</h2>
+                        <a href="#" class="text-white">View All Students</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Teachers</h5>
+                        <h2 class="display-4">{{ total_teachers }}</h2>
+                        <a href="#" class="text-white">View All Teachers</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Groups</h5>
+                        <h2 class="display-4">{{ total_groups }}</h2>
+                        <a href="#" class="text-white">View All Groups</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card action-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Student Management</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-user-plus"></i> Add New Student
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-list"></i> View All Students
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card action-card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Teacher Management</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-user-plus"></i> Add New Teacher
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-list"></i> View All Teachers
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card action-card">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Group Management</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-plus-circle"></i> Create New Group
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-list"></i> View All Groups
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Our App Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-info-circle me-2"></i>About Our App</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary mb-3">What We Offer</h4>
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>Student Management:</strong> Track and manage student information, attendance, and performance
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>Teacher Management:</strong> Organize and manage teacher schedules and information
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>Group Management:</strong> Create and manage student groups efficiently
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>Real-time Updates:</strong> Get instant updates on all activities
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="text-primary mb-3">Key Features</h4>
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <div class="text-center">
+                                            <i class="fas fa-chart-line fa-3x text-primary mb-2"></i>
+                                            <h5>Analytics</h5>
+                                            <p class="text-muted">Track performance metrics</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="text-center">
+                                            <i class="fas fa-clock fa-3x text-primary mb-2"></i>
+                                            <h5>Time Saving</h5>
+                                            <p class="text-muted">Automated processes</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="text-center">
+                                            <i class="fas fa-shield-alt fa-3x text-primary mb-2"></i>
+                                            <h5>Security</h5>
+                                            <p class="text-muted">Data protection</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <div class="text-center">
+                                            <i class="fas fa-sync fa-3x text-primary mb-2"></i>
+                                            <h5>Updates</h5>
+                                            <p class="text-muted">Regular improvements</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact & Help Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"><i class="fas fa-envelope me-2"></i>Contact & Help</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary mb-3">Get in Touch</h4>
+                                <p class="mb-4">Have questions or need assistance? Fill out the form and we'll get back to you as soon as possible.</p>
+                                
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-phone me-2 text-primary"></i>Contact Information</h5>
+                                    <p class="mb-1">Phone: +1 234 567 890</p>
+                                    <p class="mb-1">Email: support@studentmanagement.com</p>
+                                    <p>Address: 123 Education Street, Learning City</p>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h5><i class="fas fa-clock me-2 text-primary"></i>Support Hours</h5>
+                                    <p class="mb-1">Monday - Friday: 9:00 AM - 5:00 PM</p>
+                                    <p>Saturday: 10:00 AM - 2:00 PM</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <form id="contactForm">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="subject" class="form-label">Subject</label>
+                                        <select class="form-select" id="subject" required>
+                                            <option value="">Select a subject</option>
+                                            <option value="general">General Inquiry</option>
+                                            <option value="technical">Technical Support</option>
+                                            <option value="billing">Billing Question</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="message" class="form-label">Message</label>
+                                        <textarea class="form-control" id="message" rows="4" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically send the form data to your server
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
