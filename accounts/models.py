@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django_countries.fields import CountryField
 from django.utils.text import slugify
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -33,3 +34,13 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse("accounts:Profile_detail", kwargs={"slug": self.slug})
+
+
+def create_profile(sender, **kwargs):
+    if kwargs['created']:
+        user_profile = Profile.objects.create(user=kwargs['instance'])
+
+
+
+post_save.connect(create_profile, sender=User)
+ 
