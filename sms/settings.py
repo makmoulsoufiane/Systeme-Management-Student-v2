@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'Scores',
     'Group',
     'student_exam',
+    'django_countries',
     ]
 
 
