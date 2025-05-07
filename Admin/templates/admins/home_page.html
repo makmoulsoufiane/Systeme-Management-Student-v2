@@ -104,7 +104,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Total Students</h5>
                         <h2 class="display-4">{{ total_students }}</h2>
-                        <a href="#" class="text-white">View All Students</a>
+                        <a href="{% url 'student_list' %}" class="text-white">View All Students</a>
                     </div>
                 </div>
             </div>
@@ -113,16 +113,16 @@
                     <div class="card-body">
                         <h5 class="card-title">Total Teachers</h5>
                         <h2 class="display-4">{{ total_teachers }}</h2>
-                        <a href="#" class="text-white">View All Teachers</a>
+                        <a href="{% url 'teacher_list' %}" class="text-white">View All Teachers</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card stat-card bg-warning text-white">
                     <div class="card-body">
-                        <h5 class="card-title">Total Groups</h5>
-                        <h2 class="display-4">{{ total_groups }}</h2>
-                        <a href="#" class="text-white">View All Groups</a>
+                        <h5 class="card-title">Total Admins</h5>
+                        <h2 class="display-4">{{ total_Admins }}</h2>
+                        <a href="{% url 'admin_list' %}" class="text-white">View All Admins</a>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#">
+                                <a href="{% url 'student_list' %}">
                                     <i class="fas fa-list"></i> View All Students
                                 </a>
                             </li>
@@ -165,7 +165,7 @@
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#">
+                                <a href="{% url 'teacher_list' %}">
                                     <i class="fas fa-list"></i> View All Teachers
                                 </a>
                             </li>
@@ -177,18 +177,18 @@
             <div class="col-md-4">
                 <div class="card action-card">
                     <div class="card-header bg-warning text-white">
-                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Group Management</h5>
+                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Admins Management</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <a href="#">
-                                    <i class="fas fa-plus-circle"></i> Create New Group
+                                    <i class="fas fa-plus-circle"></i> Create New Admin
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#">
-                                    <i class="fas fa-list"></i> View All Groups
+                                <a href="{% url 'admin_list' %}">
+                                    <i class="fas fa-list"></i> View All Admins
                                 </a>
                             </li>
                         </ul>

@@ -147,5 +147,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LOGIN_REDIRECT_URL = '/sms'
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'  # Ensure this matches an existing route
 LOGOUT_REDIRECT_URL = '/sms'
