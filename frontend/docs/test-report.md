@@ -68,3 +68,23 @@ complete six-test browser suite was rerun successfully.
 
 Reproduce the checks using the root README. Screenshots are generated under
 `frontend/test-results/` (ignored by Git); they contain synthetic test data only.
+
+## Login glass styling update — 2026-10-14
+
+The login presentation now uses a scoped stylesheet, translucent card, glass
+shapes, moving light, entrance animation, and button reflections. Authentication
+submission, routes, and backend code were not changed.
+
+- `npm run test:e2e -- --grep 'staff can sign in'`: both desktop and mobile tests
+  passed against the disposable Django backend, including invalid credentials,
+  successful sign-in, navigation, session restore, and sign-out.
+- Desktop and mobile login screenshots were visually reviewed for legibility,
+  clipping, and spacing.
+- An ad hoc Chromium check against localhost:5173 verified running, paused, and
+  resumed ambient motion, no horizontal overflow at 390px/320px, 16px mobile
+  inputs, and disabled animation under reduced-motion preference. This visual
+  check stubbed only session bootstrap; authentication was verified separately
+  by the real-backend integration tests above.
+- CSS provides an opaque fallback when backdrop filtering is unavailable or
+  reduced transparency is requested. Styles are scoped to `.glass-login`.
+- Final `npm run build` passed after the styling adjustments (110 modules).

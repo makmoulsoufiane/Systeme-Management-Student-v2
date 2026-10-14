@@ -159,3 +159,16 @@ Release goal: staff can manage real Django school records through the React port
 The agreed staff portal implementation is complete. Frontend behavior, desktop/mobile real-Django integration, build and design review passed. The final Django API regression passed 12 tests and reported no system-check issues. All ten agreed delivery tasks are complete; detailed evidence and verification boundaries are recorded in the test report.
 
 Configured PostgreSQL connectivity was not verified: the read-only probe was sandbox-denied and escalation was interrupted. No database writes or migrations were applied there. The migration graph inspection found no conflicts. Isolated Django API/browser verification establishes implemented behavior without claiming access to that external database.
+
+## UI refinement
+
+### TASK-011 — add Liquid Glass and motion to the login page
+
+- Requirement / story: As staff, I want a polished, calm sign-in page with glass styling and animation while retaining the existing login flow.
+- Priority / size / owner: Must / S / design and implementation.
+- Dependencies: TASK-010. Status: Done.
+- Scope: `LoginPage.jsx`, scoped `login.css`, and design/verification documentation.
+- Acceptance: glass surfaces, subtle motion with pause/reduced-motion support, readable mobile layout, unchanged authentication behavior, and no styles leaking into workspace pages.
+- Verification: production build; desktop/mobile existing sign-in browser tests; screenshot review; ad hoc motion and 320px/390px layout checks.
+- Evidence: build and two browser tests passed; animation state and responsive checks passed. See the login-update section of the test report.
+- Blocker / next action: none.

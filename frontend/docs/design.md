@@ -35,3 +35,17 @@ Inspected browser screenshots of desktop sign-in, student list, and student crea
 The initial mobile list screenshot revealed document-wide horizontal overflow beyond its otherwise correctly constrained table. The absolutely positioned, visually hidden last-column header needed a containing block inside the scroll viewport. Added `position: relative` to `.table-wrap`. The refreshed 390px-wide mobile screenshot now fits the viewport, and the browser document-width assertion passed. The table remains horizontally scrollable within its panel.
 
 Also inspected the mobile student form: fields stack cleanly in one column, labels and values remain readable, focus is visible, and cancel/save actions fit within the panel. No remaining layout defects were observed in the six reviewed login, list, and form screenshots across desktop and mobile. The task agent separately confirmed the desktop dialog focus-restoration test passed; functional browser test evidence is tracked in the backlog.
+
+## Login refinement — 2026-10-14
+
+The requested Liquid Glass treatment is isolated in `features/auth/presentation/login.css`
+under `.glass-login`. The centered sign-in flow retains its labels, copy, error
+feedback, and submission behavior. A translucent surface with bright inset edges
+sits above soft blue/peach light and gently floating glass shapes. Hover feedback
+adds a reflected highlight to the primary button; entrance motion runs once.
+
+Ambient motion has an explicit pause/resume control and turns off with reduced
+motion. Reduced transparency and unsupported backdrop filtering use an opaque
+card. Decorative elements are hidden from assistive technology and ignore pointer
+events. Inputs use 16px text on mobile. Reviewed the refreshed desktop/mobile
+screenshots and verified no page overflow at 390px and 320px.
