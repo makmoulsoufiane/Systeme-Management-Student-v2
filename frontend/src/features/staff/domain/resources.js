@@ -5,7 +5,7 @@ const fullName = { name: 'fullname', label: 'Full name', required: true, maxLeng
 export const resources = {
   students: {
     title: 'Students', singular: 'student', id: 'id_student', name: 'fullname', icon: 'students',
-    description: 'A clear view of every student and where they belong.',
+    description: 'Find students and manage their enrollment and group details.',
     fields: [fullName, { name: 'address', label: 'Address', required: true, maxLength: 255 }, enrollment,
       { ...administrator }, { name: 'group', label: 'Group', type: 'select', source: 'groups', required: true }],
     columns: [{ name: 'fullname', label: 'Student' }, { name: 'group_name', label: 'Group' },
@@ -13,7 +13,7 @@ export const resources = {
   },
   teachers: {
     title: 'Teachers', singular: 'teacher', id: 'id_teacher', name: 'fullname', icon: 'teachers',
-    description: 'The people guiding your students, all in one place.',
+    description: 'Find teachers and update their staff records.',
     fields: [fullName, { name: 'adress', label: 'Address', required: true, maxLength: 255 }, enrollment,
       { ...administrator, required: false }],
     columns: [{ name: 'fullname', label: 'Teacher' }, { name: 'adress', label: 'Address' },
@@ -21,7 +21,7 @@ export const resources = {
   },
   groups: {
     title: 'Groups', singular: 'group', id: 'id_group', name: 'name', icon: 'groups',
-    description: 'Organize learning groups and their teaching assignments.',
+    description: 'Manage groups and assign their teachers.',
     fields: [{ name: 'name', label: 'Group name', required: true, maxLength: 100 },
       { name: 'year_of_creation', label: 'Year created', type: 'number', required: true, min: 0, step: 1 },
       { ...administrator }, { name: 'teacher', label: 'Teacher', type: 'select', source: 'teachers',
@@ -31,7 +31,7 @@ export const resources = {
   },
   exams: {
     title: 'Exams', singular: 'exam', id: 'id_exam', name: 'name', icon: 'exams',
-    description: 'Keep upcoming assessments and their details organized.',
+    description: 'Manage exam dates, locations, and assigned groups.',
     fields: [{ name: 'name', label: 'Exam name', required: true, maxLength: 255 },
       { name: 'date_hour', label: 'Date and time', type: 'datetime-local', step: 'any', required: true, hint: 'Shown in your local time zone.' },
       { name: 'place', label: 'Location', required: true, maxLength: 50 },
@@ -42,7 +42,7 @@ export const resources = {
   },
   scores: {
     title: 'Scores', singular: 'score', id: 'id', name: 'student_name', icon: 'scores',
-    description: 'Record assessment results with confidence and clarity.',
+    description: 'View and update student scores for each exam.',
     fields: [{ name: 'student', label: 'Student', type: 'select', source: 'students', required: true },
       { name: 'note', label: 'Score', type: 'number', step: 'any', required: true, hint: 'Use your institution’s grading scale.' },
       { name: 'exam', label: 'Exam', type: 'select', source: 'exams' },

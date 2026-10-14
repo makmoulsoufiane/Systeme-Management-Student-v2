@@ -92,7 +92,7 @@
 
 .glass-login .login-card {
   position: relative;
-  width: min(100%, 470px);
+  width: min(100%, 500px);
   padding: 38px 40px 30px;
   border: 1px solid #ffffffd9;
   border-radius: 32px;
@@ -128,31 +128,31 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #506688;
-  font-size: 9px;
-  letter-spacing: 1.5px;
+  color: var(--muted);
+  font-size: .75rem;
+  letter-spacing: .08em;
   margin: 0 0 13px;
 }
 .glass-login .eyebrow > span { width: 5px; height: 5px; background: #5278c5; border-radius: 50%; }
-.glass-login .login-card h1 { font-size: clamp(26px, 3.4vw, 32px); line-height: 1.22; letter-spacing: -1.15px; margin: 0; color: #223653; }
+.glass-login .login-card h1 { font-size: clamp(1.875rem, 3.4vw, 2.25rem); line-height: 1.22; letter-spacing: -.025em; margin: 0; color: #223653; }
 .glass-login .login-card h1 span { color: #365e99; }
-.glass-login .page-description { font-size: 13px; line-height: 1.8; color: #52637d; margin-top: 14px; }
+.glass-login .page-description { font-size: 1rem; line-height: 1.8; color: var(--muted); margin-top: 14px; }
 .glass-login .login-card form { gap: 20px; }
 .glass-login .field { gap: 9px; }
-.glass-login .field label { color: #384f70; font-size: 12px; font-weight: 600; }
+.glass-login .field label { color: #384f70; font-size: .9375rem; font-weight: 600; }
 .glass-login .field input {
   min-height: 50px;
   padding: 12px 15px;
   border-radius: 13px;
-  border: 1px solid #afbed480;
+  border: 1px solid #8291a6;
   background: #ffffff80;
   box-shadow: inset 0 2px 4px #36547e08, 0 1px #ffffffb3;
-  font-size: 16px;
+  font-size: 1rem;
   color: #223653;
   transition: background .2s, border-color .2s, box-shadow .2s;
 }
 .glass-login .field input:hover { background: #ffffffad; border-color: #95aed0; }
-.glass-login .field input:focus-visible { outline: 3px solid #3669c780; outline-offset: 3px; background: #ffffffe0; border-color: #5178bb; box-shadow: 0 0 0 6px #ffffff40; }
+.glass-login .field input:focus-visible { outline: 3px solid #2859cf; outline-offset: 3px; background: #ffffffe0; border-color: #5178bb; box-shadow: 0 0 0 6px #ffffff40; }
 .glass-login .button-primary {
   position: relative;
   overflow: hidden;
@@ -160,9 +160,9 @@
   margin-top: 4px;
   border-radius: 14px;
   border: 1px solid #3d63b4;
-  background: linear-gradient(165deg, #3c6ddd, #2c59bd 72%);
+  background: linear-gradient(165deg, #2859c5, #244da6 72%);
   color: #fff;
-  font-size: 13px;
+  font-size: 1rem;
   box-shadow: inset 0 1px 1px #ffffff87, inset 0 -1px 2px #173a8f66, 0 7px 17px #315cc12b;
   transition: transform .2s, box-shadow .2s;
 }
@@ -170,7 +170,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, transparent 20%, #ffffff26 48%, transparent 75%);
+  background: linear-gradient(110deg, transparent 20%, #ffffff14 48%, transparent 75%);
   transform: translateX(-110%);
   transition: transform .65s ease;
   pointer-events: none;
@@ -180,9 +180,9 @@
 .glass-login .button-primary:not(:disabled):hover::before { transform: translateX(110%); }
 .glass-login .button-primary:not(:disabled):hover svg { transform: translateX(3px); }
 .glass-login .button-primary:not(:disabled):active { transform: translateY(0); }
-.glass-login .login-note { padding-top: 22px; border-top: 1px solid #9eafc526; color: #506079; font-size: 11px !important; line-height: 1.7; }
+.glass-login .login-note { padding-top: 22px; border-top: 1px solid #9eafc526; color: var(--muted); font-size: .875rem !important; line-height: 1.7; }
 .glass-login .error-banner { background: #fff1f3f2; color: #93283d; margin: 0; }
-.glass-login .login-footer { position: relative; text-align: center; color: #586880; font-size: 11px; letter-spacing: .1px; animation: campus-glass-enter .9s .1s both; }
+.glass-login .login-footer { position: relative; text-align: center; color: var(--muted); font-size: .875rem; letter-spacing: .1px; animation: campus-glass-enter .9s .1s both; }
 .glass-login .login-footer span { color: #354e73; }
 
 .glass-login .motion-toggle {
@@ -196,10 +196,10 @@
   padding: 9px 14px;
   border: 1px solid #ffffffcc;
   border-radius: 24px;
-  color: #455b7b;
+  color: var(--muted);
   background: #ffffff75;
   box-shadow: inset 0 1px #fff, 0 3px 10px #4e66910a;
-  font-size: 11px;
+  font-size: .875rem;
 }
 .glass-login .motion-toggle:hover { background: #ffffffbd; }
 .glass-login .motion-symbol { width: 9px; height: 10px; border-left: 2px solid currentColor; border-right: 2px solid currentColor; }
@@ -209,7 +209,7 @@
 
 @supports ((backdrop-filter: blur(24px)) or (-webkit-backdrop-filter: blur(24px))) {
   .glass-login .login-card {
-    background: linear-gradient(145deg, #ffffffad, #ffffff59);
+    background: linear-gradient(145deg, #ffffffdb, #ffffffb8);
     -webkit-backdrop-filter: blur(24px) saturate(135%);
     backdrop-filter: blur(24px) saturate(135%);
   }
@@ -223,7 +223,7 @@
   .glass-login.login-page { padding: 72px 20px 28px; gap: 23px; }
   .glass-login .login-card { padding: 30px 25px 25px; border-radius: 27px; }
   .glass-login .login-card::before { border-radius: 22px; }
-  .glass-login .login-card h1 { font-size: clamp(25px, 7vw, 30px); }
+  .glass-login .login-card h1 { font-size: clamp(1.75rem, 7vw, 2rem); }
   .glass-login .login-brand { margin-bottom: 27px; }
   .glass-login .glass-orb-large { left: -150px; bottom: 1%; }
   .glass-login .glass-orb-small { right: -75px; top: 5%; }

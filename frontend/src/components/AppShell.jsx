@@ -33,7 +33,7 @@ export default function AppShell({ user, onLogout, children }) {
           <CampusMark />
           <div>
             <span className="brand-name">Campus<span className="brand-dot">.</span></span>
-            <span className="brand-subtitle">STUDENT MANAGEMENT</span>
+            <span className="brand-subtitle">Staff workspace</span>
           </div>
           <button
             className="button button-icon mobile-toggle"

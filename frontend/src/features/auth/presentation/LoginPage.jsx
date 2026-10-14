@@ -46,8 +46,8 @@ export default function LoginPage({ gateway, onLogin }) {
 
         <div className="login-intro">
           <p className="eyebrow"><span aria-hidden="true" />YOUR ACADEMIC WORKSPACE</p>
-          <h1 id="login-title">A little clarity.<br /><span>A better school day.</span></h1>
-          <p className="page-description">Sign in to keep your students, people, and learning connected.</p>
+          <h1 id="login-title">Welcome to<br /><span>Campus.</span></h1>
+          <p className="page-description">Manage students, teachers, groups, exams, and scores in one place.</p>
         </div>
 
         <form onSubmit={submit}>
@@ -65,7 +65,7 @@ export default function LoginPage({ gateway, onLogin }) {
           </button>
         </form>
 
-        <p className="login-note"><Icon name="shield" size={17} />For authorized school staff. Use your Django staff account.</p>
+        <p className="login-note"><Icon name="shield" size={17} />Sign in with your school staff account. Contact your administrator if you need access.</p>
       </section>
       <p className="login-footer">Less administration. <span>More possibility.</span></p>
     </main>

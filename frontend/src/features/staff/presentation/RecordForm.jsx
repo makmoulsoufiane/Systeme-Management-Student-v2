@@ -30,7 +30,7 @@ export default function RecordForm({ resource, gateway, onSessionExpired }) {
   const back = id ? `/${resource}/${id}` : `/${resource}`;
   return <>
     <Link className="breadcrumb" to={back}><Icon name="arrow-left" />Back to {id ? config.singular : config.title.toLowerCase()}</Link>
-    <header className="page-heading"><div><p className="eyebrow">KEEP YOUR RECORDS CONNECTED</p><h1 className="page-title">{id ? 'Edit' : 'Add'} {config.singular}</h1><p className="page-description">A few details now. A more organized day ahead.</p></div></header>
+    <header className="page-heading"><div><p className="eyebrow">MANAGE RECORDS</p><h1 className="page-title">{id ? 'Edit' : 'Add'} {config.singular}</h1><p className="page-description">Enter the details below, then save your changes.</p></div></header>
     {state.loading ? <LoadingState /> : state.error ? <ErrorState error={state.error} onRetry={() => setRevision(revision + 1)} />
       : <Editor config={config} resource={resource} record={state.record} options={state.options} gateway={gateway} onSessionExpired={onSessionExpired}
         onSaved={(record) => navigate(`/${resource}/${record[config.id]}`, { replace: true, state: { notice: `${config.title.slice(0, -1)} saved successfully.` } })} back={back} />}

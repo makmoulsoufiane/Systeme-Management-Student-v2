@@ -29,7 +29,7 @@ export default function RecordDetail({ resource, gateway, onSessionExpired }) {
   return <>
     <Link className="breadcrumb" to={`/${resource}`}><Icon name="arrow-left" />All {config.title.toLowerCase()}</Link>
     {loading ? <LoadingState /> : error ? <ErrorState error={error} onRetry={() => setRevision(revision + 1)} /> : <>
-      <header className="page-heading"><div><p className="eyebrow">{config.singular.toUpperCase()} RECORD · #{id}</p><h1 className="page-title">{record[config.name] || `${config.singular} #${id}`}</h1><p className="page-description">The details that keep everything connected.</p></div>
+      <header className="page-heading"><div><p className="eyebrow">{config.singular.toUpperCase()} RECORD · #{id}</p><h1 className="page-title">{record[config.name] || `${config.singular} #${id}`}</h1><p className="page-description">Review this record and its related information.</p></div>
         <Link className="button button-primary" to={`/${resource}/${id}/edit`}><Icon name="edit" />Edit {config.singular}</Link></header>
       {location.state?.notice && <p className="status-message" role="status"><Icon name="check" />{location.state.notice}</p>}
       <section className="panel detail-panel"><div className="form-section-heading"><Icon name={config.icon} /><h2>Record details</h2></div><dl className="detail-grid">
