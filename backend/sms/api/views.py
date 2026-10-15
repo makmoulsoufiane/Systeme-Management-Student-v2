@@ -69,7 +69,9 @@ class RecordsView(generics.GenericAPIView):
             raise PermissionDenied('Administrator records are managed in Django admin.')
 
     def save_record(self, instance=None):
-        self.require_admin_write()
+        teacher_create = self.request.user.role == 'teacher' and instance is None and self.kwargs['resource_name'] in ('exams', 'scores')
+        if not teacher_create:
+            self.require_admin_write()
         resource = self.get_resource()
         payload = self.request.data
         if not isinstance(payload, dict):
@@ -83,9 +85,31 @@ class RecordsView(generics.GenericAPIView):
         invalid = {name: ['Enter a single value.'] for name, value in payload.items() if isinstance(value, (dict, list, bool))}
         if invalid:
             raise ValidationError(invalid)
+        if teacher_create:
+            profile = getattr(self.request.user, 'teacher_profile', None)
+            if not profile:
+                raise PermissionDenied('Your account needs a linked teacher record.')
+            if 'teacher' in payload and str(payload['teacher']) != str(profile.teacher_id):
+                raise PermissionDenied('You can only create records as yourself.')
+            if payload.get('admin') not in (None, ''):
+                raise PermissionDenied('Teachers cannot assign administrator approval.')
+            payload = {**payload, 'teacher': profile.teacher_id}
         form = resource.form(payload, instance)
+        if teacher_create:
+            # Validate submitted relation IDs against ownership, not just existence.
+            teacher_id = profile.teacher_id
+            if self.kwargs['resource_name'] == 'exams':
+                form.fields['group'].required = True
+                form.fields['group'].queryset = form.fields['group'].queryset.filter(teacher_id=teacher_id)
+            else:
+                form.fields['student'].queryset = form.fields['student'].queryset.filter(group__teacher_id=teacher_id)
+                form.fields['exam'].required = True
+                form.fields['exam'].queryset = form.fields['exam'].queryset.filter(group__teacher_id=teacher_id)
         if not form.is_valid():
             raise ValidationError({name: list(messages) for name, messages in form.errors.items()})
+        if teacher_create and self.kwargs['resource_name'] == 'scores':
+            if form.cleaned_data['exam'].group_id != form.cleaned_data['student'].group_id:
+                raise ValidationError({'exam': ['Choose an exam for this student’s group.']})
         try:
             with transaction.atomic():
                 record = form.save()

@@ -118,3 +118,22 @@ profiles, fixed account roles, atomic profile creation, password validation,
 old-token rejection after password change/deactivation, refresh rotation, logout,
 CORS allowlist and removal of legacy HTML bypass routes. This is not a full
 production security audit or cross-browser accessibility certification.
+
+### Teacher account URLs — 2026-10-15
+
+- `npm test -- --maxWorkers=1`: 32 tests passed across 5 files. Covers personalized teacher login/restored session/deep links, sidebar and dashboard navigation, required password-change return, old bookmarks, and rejecting unrelated or invalid teacher IDs before fetching records.
+- `npm run build`: passed, 124 modules.
+- `git diff --check`: passed.
+- Initial parallel test/build run hit timing failures; the location test helper also introduced a duplicate status role, corrected to a plain span. Final serial-worker suite passed.
+- Browser expectation updated for the numeric teacher URL; browser and visual checks were not rerun. No visual or backend changes in this task.
+- Architecture review: URL construction centralized; authenticated account ID is distinct from school record ID; route checks occur before nested screens render; backend authorization retained.
+
+### Teacher exam and score creation — 2026-10-15
+
+- `env/bin/python backend/manage.py test accounts.tests sms.api.tests --settings=sms.test_settings`: 17 tests passed using an isolated test database. Includes successful teacher creates with automatic attribution, denied foreign relations, missing required group/exam, forged teacher/admin, orphan teacher and student writes. Existing admin and auth tests passed.
+- `env/bin/python backend/manage.py check --settings=sms.test_settings`: no issues.
+- `npm test -- --maxWorkers=1`: 35 tests passed. Includes teacher create navigation, scoped form options, absent identity/approval selectors, and student read-only UI.
+- `npm run build`: passed (124 modules).
+- `git diff --check`: passed.
+- Browser/visual verification was not run. No migration, dependency change or live data mutation.
+- Architecture review: API owns permissions and teacher attribution; relationship choices validated before save; frontend reuses existing gateway/forms and only exposes authorized create routes.

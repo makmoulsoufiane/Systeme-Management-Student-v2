@@ -81,3 +81,9 @@ Teachers and students receive read-only views. Each account is linked explicitly
 to an existing school record, avoiding duplicate enrollment/staff data. Current
 Group.teacher cardinality is retained. Per-class write/grade-entry workflows and
 multi-class teacher assignment are outside this request's implemented scope.
+
+### RBAC-007 — Teacher account URLs
+Teachers use `/teacher/:teacherId/dashboard` and `/teacher/:teacherId/records/...`. The ID is the authenticated User ID, not the school Teacher record ID. Login, restored sessions and password changes open this workspace. Old teacher bookmarks redirect; another account ID shows access denied before records load.
+
+### RBAC-008 — Teacher exam and score creation
+Teachers can create exams for their assigned group and add scores for students and exams in that group. Teacher identity is supplied by the server; teachers cannot assign administrator approval or submit other-class IDs. Students remain read-only; editing/deleting records stays admin-only. This supersedes the earlier read-only teacher scope for these two create actions.

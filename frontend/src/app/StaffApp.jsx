@@ -55,8 +55,9 @@ export default function StaffApp({ gateway, accountGateway }) {
           <Route path=":id/edit" element={<AccountForm key={`${accountRole}-edit`} role={accountRole} gateway={accountGateway} records={gateway} />} />
         </Route>)}
         {Object.keys(resources).filter((resource) => role === 'admin' || resource !== 'teachers').map((resource) => <Route key={resource} path={`records/${resource}`}>
-          <Route index element={<RecordList key={`${role}-${resource}`} resource={resource} {...props} basePath={`${role === 'teacher' ? workspacePath(auth.user) : `/${role}`}/records`} readOnly={role !== 'admin'} />} />
+          <Route index element={<RecordList canCreate={role === 'admin' || (role === 'teacher' && ['exams', 'scores'].includes(resource))} key={`${role}-${resource}`} resource={resource} {...props} basePath={`${role === 'teacher' ? workspacePath(auth.user) : `/${role}`}/records`} readOnly={role !== 'admin'} />} />
           <Route path=":id" element={<RecordDetail key={`${role}-${resource}`} resource={resource} {...props} basePath={`${role === 'teacher' ? workspacePath(auth.user) : `/${role}`}/records`} readOnly={role !== 'admin'} />} />
+          {role === 'teacher' && ['exams', 'scores'].includes(resource) && <Route path="new" element={<RecordForm key={`teacher-${resource}-new`} resource={resource} {...props} basePath={`${workspacePath(auth.user)}/records`} teacherMode />} />}
           {role === 'admin' && <><Route path="new" element={<RecordForm key={`${resource}-new`} resource={resource} {...props} basePath="/admin/records" />} />
             <Route path=":id/edit" element={<RecordForm key={`${resource}-edit`} resource={resource} {...props} basePath="/admin/records" />} /></>}
         </Route>)}

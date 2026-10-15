@@ -4,10 +4,16 @@ import Icon from '../../../components/Icon.jsx';
 import { ErrorState, LoadingState } from '../../../components/Feedback.jsx';
 import { formPayload, initialValues, optionIdentity, resources } from '../domain/resources.js';
 
-export default function RecordForm({ resource, gateway, onSessionExpired, basePath = '' }) {
+const teacherConfigs = Object.fromEntries(['exams', 'scores'].map((name) => [name, {
+  ...resources[name],
+  fields: resources[name].fields.filter((field) => !['teacher', 'admin'].includes(field.name)).map((field) =>
+    ['group', 'exam'].includes(field.name) ? { ...field, required: true } : field),
+}]));
+
+export default function RecordForm({ resource, gateway, onSessionExpired, basePath = '', teacherMode = false }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const config = resources[resource];
+  const config = teacherMode ? teacherConfigs[resource] : resources[resource];
   const [state, setState] = useState({ loading: true, error: null, options: {}, record: null });
   const [revision, setRevision] = useState(0);
   useEffect(() => {
@@ -32,12 +38,12 @@ export default function RecordForm({ resource, gateway, onSessionExpired, basePa
     <Link className="breadcrumb" to={back}><Icon name="arrow-left" />Back to {id ? config.singular : config.title.toLowerCase()}</Link>
     <header className="page-heading"><div><p className="eyebrow">MANAGE RECORDS</p><h1 className="page-title">{id ? 'Edit' : 'Add'} {config.singular}</h1><p className="page-description">Enter the details below, then save your changes.</p></div></header>
     {state.loading ? <LoadingState /> : state.error ? <ErrorState error={state.error} onRetry={() => setRevision(revision + 1)} />
-      : <Editor config={config} resource={resource} record={state.record} options={state.options} gateway={gateway} basePath={basePath} onSessionExpired={onSessionExpired}
+      : <Editor teacherMode={teacherMode} config={config} resource={resource} record={state.record} options={state.options} gateway={gateway} basePath={basePath} onSessionExpired={onSessionExpired}
         onSaved={(record) => navigate(`${basePath}/${resource}/${record[config.id]}`, { replace: true, state: { notice: `${config.title.slice(0, -1)} saved successfully.` } })} back={back} />}
   </>;
 }
 
-export function Editor({ config, resource, record, options, gateway, onSessionExpired, onSaved, back, basePath = '' }) {
+export function Editor({ config, resource, record, options, gateway, onSessionExpired, onSaved, back, basePath = '', teacherMode = false }) {
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -66,8 +72,8 @@ export function Editor({ config, resource, record, options, gateway, onSessionEx
 
   return <form className="panel record-form" onSubmit={submit} aria-busy={pending}>
     <div className="form-section-heading"><Icon name={config.icon} /><div><h2>{config.singular[0].toUpperCase() + config.singular.slice(1)} details</h2><p>Fields marked with * are required.</p></div></div>
-    {missingSources.map((field) => <div className="error-banner" role="status" key={field.name}><p>{field.source === 'admins' ? 'An administrator record is required. Create one in Django admin first.' : `Add a ${field.label.toLowerCase()} before creating this record.`}
-      {field.source !== 'admins' && <> <Link to={`${basePath}/${field.source}/new`}>Add {field.label.toLowerCase()}</Link></>}</p></div>)}
+    {missingSources.map((field) => <div className="error-banner" role="status" key={field.name}><p>{teacherMode ? `No ${field.label.toLowerCase()} is available. ${field.source === 'exams' ? 'Create an exam for your class first.' : 'Ask your administrator to assign your class and students.'}` : field.source === 'admins' ? 'An administrator record is required. Create one in Django admin first.' : `Add a ${field.label.toLowerCase()} before creating this record.`}
+      {!teacherMode && field.source !== 'admins' && <> <Link to={`${basePath}/${field.source}/new`}>Add {field.label.toLowerCase()}</Link></>}</p></div>)}
     {failure && <div className="error-banner" role="alert"><div><strong>{failure.message}</strong>{Object.entries(failure.fields || {}).filter(([key]) => !config.fields.some((field) => field.name === key)).map(([key, errors]) => <p key={key}>{errors.join(' ')}</p>)}</div></div>}
     <div className="form-grid">{config.fields.map((field) => {
       const fieldError = failure?.fields?.[field.name];

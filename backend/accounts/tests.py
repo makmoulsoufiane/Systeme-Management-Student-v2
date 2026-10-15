@@ -74,6 +74,45 @@ class RoleAccessTests(TestCase):
                 self.assertEqual(getattr(self.client, method)(path, {}, format='json').status_code, 403)
         self.assertEqual(self.client.get('/api/teachers/').data['results'], [])
 
+    def test_teacher_creates_exams_and_scores_only_for_assigned_class(self):
+        self.authorize(self.users[0][0])
+        exam_payload = {'name': 'New exam', 'place': 'Room 1', 'date_hour': '2026-11-01T10:00:00Z', 'group': self.groups[0].pk}
+        response = self.client.post('/api/exams/', exam_payload, format='json')
+        self.assertEqual(response.status_code, 201, response.data)
+        exam = Exam.objects.get(pk=response.data['record']['id_exam'])
+        self.assertEqual(exam.teacher_id, self.teachers[0].pk)
+        score_payload = {'student': self.students[0].pk, 'exam': exam.pk, 'note': 17}
+        response = self.client.post('/api/scores/', score_payload, format='json')
+        self.assertEqual(response.status_code, 201, response.data)
+        score = Score.objects.get(pk=response.data['record']['id'])
+        self.assertEqual(score.teacher_id, self.teachers[0].pk)
+        self.assertIsNone(score.admin_id)
+        for resource, payload, changes, expected in [
+            ('exams', exam_payload, {'group': self.groups[1].pk}, 400),
+            ('exams', exam_payload, {'group': None}, 400),
+            ('exams', exam_payload, {'teacher': self.teachers[1].pk}, 403),
+            ('scores', score_payload, {'student': self.students[1].pk}, 400),
+            ('scores', score_payload, {'exam': self.exams[1].pk}, 400),
+            ('scores', score_payload, {'exam': None}, 400),
+            ('scores', score_payload, {'teacher': self.teachers[1].pk}, 403),
+            ('scores', score_payload, {'admin': self.owner.pk}, 403),
+        ]:
+            with self.subTest(resource=resource, changes=changes):
+                count = Exam.objects.count() if resource == 'exams' else Score.objects.count()
+                response = self.client.post(f'/api/{resource}/', {**payload, **changes}, format='json')
+                self.assertEqual(response.status_code, expected, response.data)
+                self.assertEqual(Exam.objects.count() if resource == 'exams' else Score.objects.count(), count)
+        for resource, record in [('exams', exam), ('scores', score)]:
+            self.assertEqual(self.client.patch(f'/api/{resource}/{record.pk}/', {}, format='json').status_code, 403)
+            self.assertEqual(self.client.delete(f'/api/{resource}/{record.pk}/').status_code, 403)
+        self.authorize(self.users[0][1])
+        self.assertEqual(self.client.post('/api/exams/', exam_payload, format='json').status_code, 403)
+        self.assertEqual(self.client.post('/api/scores/', score_payload, format='json').status_code, 403)
+        orphan = User.objects.create_user('unlinked-teacher', role='teacher', must_change_password=False)
+        self.authorize(orphan)
+        self.assertEqual(self.client.post('/api/exams/', exam_payload, format='json').status_code, 403)
+        self.assertEqual(self.client.post('/api/scores/', score_payload, format='json').status_code, 403)
+
     def test_missing_profiles_fail_closed_and_forged_roles_are_ignored(self):
         orphan = User.objects.create_user('orphan', password=PASSWORD, role='teacher', must_change_password=False)
         token = self.authorize(orphan)

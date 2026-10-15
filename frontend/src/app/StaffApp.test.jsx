@@ -8,7 +8,7 @@ import { createSessionStore } from '../features/auth/application/sessionStore.js
 
 function LocationDisplay() {
   const { pathname, search, hash } = useLocation();
-  return <output data-testid="location">{pathname}{search}{hash}</output>;
+  return <span data-testid="location">{pathname}{search}{hash}</span>;
 }
 
 function open({ role = 'admin', mustChange = false, path = '/', session = true, me, list } = {}) {
@@ -95,6 +95,27 @@ describe('role routes', () => {
     open({ role: 'teacher', path: '/teacher/records/students' });
     expect(await screen.findByRole('heading', { name: 'No records assigned' })).toBeVisible();
     expect(screen.queryByRole('link', { name: 'Add student' })).not.toBeInTheDocument();
+  });
+  it.each(['exams', 'scores'])('lets teachers open the %s creation form without identity or admin selectors', async (resource) => {
+    const list = vi.fn().mockImplementation(async (name) => ({
+      groups: [{ id_group: 10, name: 'My class' }],
+      students: [{ id_student: 20, fullname: 'My student', group: 10 }],
+      exams: [{ id_exam: 30, name: 'My exam', group: 10 }],
+    }[name] || []));
+    open({ role: 'teacher', path: `/teacher/1/records/${resource}`, list });
+    const singular = resource === 'exams' ? 'exam' : 'score';
+    await userEvent.click((await screen.findAllByRole('link', { name: `Add ${singular}` }))[0]);
+    expect(await screen.findByRole('button', { name: `Save ${singular}` })).toBeEnabled();
+    expect(screen.getByTestId('location')).toHaveTextContent(`/teacher/1/records/${resource}/new`);
+    expect(screen.queryByLabelText('Teacher')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Administrator')).not.toBeInTheDocument();
+    expect(list.mock.calls.some(([name]) => ['teachers', 'admins'].includes(name))).toBe(false);
+    expect(screen.getByRole('option', { name: resource === 'exams' ? 'My class' : 'My student' })).toBeInTheDocument();
+  });
+  it('does not allow students to create exams', async () => {
+    open({ role: 'student', path: '/student/records/exams' });
+    expect(await screen.findByRole('heading', { name: 'No records assigned' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'Add exam' })).not.toBeInTheDocument();
   });
   it('clears the session when private requests report expiry', async () => {
     open({ path: '/admin/records/students', list: vi.fn().mockRejectedValue({ status: 401, message: 'Expired' }) });

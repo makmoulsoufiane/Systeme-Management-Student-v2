@@ -210,3 +210,22 @@ Configured PostgreSQL connectivity was not verified: the read-only probe was san
 - Verification: compare documentation to source and test evidence.
 - Evidence: fresh migration and standard existing-user adoption tested in disposable SQLite; configured database unchanged.
 - Blocker / next action: none for documentation; follow the existing-database upgrade guide before running against school data.
+
+### TASK-015 — Teacher account URLs
+
+- Requirement: RBAC-007. Story: teachers have a stable personal workspace URL.
+- Priority / size / owner: Must / S / implementation. Dependencies: existing role workspaces.
+- Status: Done.
+- Scope: route helper, teacher layout, redirects, dashboard links, password-change destination, routing tests and browser expectation.
+- Acceptance: account ID in teacher links; old bookmarks redirect; wrong IDs denied; login, refresh and onboarding route correctly.
+- Verification: frontend tests and production build; no backend or visual changes.
+- Evidence: 32 frontend tests passed; production build passed (124 modules); diff whitespace check passed. Browser suite expectation updated but not rerun.
+
+### TASK-016 — Teacher exam and score creation
+
+- Requirement: RBAC-008. Story: teachers create exams and enter scores for their assigned students.
+- Priority / size / owner: Must / S / implementation. Dependencies: role workspaces and school relationships. Status: Done.
+- Scope: API create permission/relationship validation, teacher forms and routes, list actions, tests.
+- Acceptance: own-class creates succeed, identity assigned server-side, foreign relations/forged identity denied, students read-only.
+- Evidence: 17 targeted backend tests and 35 frontend tests passed; Django check passed. Build recorded in test report.
+- Limitation: no live browser verification in this task; edit/delete remain admin-only.

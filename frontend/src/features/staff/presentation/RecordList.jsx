@@ -5,7 +5,7 @@ import { ErrorState, LoadingState } from '../../../components/Feedback.jsx';
 import { formatValue, resources } from '../domain/resources.js';
 import { useResource } from './useResource.js';
 
-export default function RecordList({ resource, gateway, onSessionExpired, basePath = '', readOnly = false }) {
+export default function RecordList({ resource, gateway, onSessionExpired, basePath = '', readOnly = false, canCreate = !readOnly }) {
   const config = resources[resource];
   const [query, setQuery] = useState('');
   const [revision, setRevision] = useState(0);
@@ -15,8 +15,8 @@ export default function RecordList({ resource, gateway, onSessionExpired, basePa
 
   return <>
     <header className="page-heading"><div className="page-heading-copy"><p className="eyebrow">PEOPLE & LEARNING</p>
-      <h1 className="page-title">{config.title}<span className="title-dot">.</span></h1><p className="page-description">{readOnly ? 'View the records available to your account.' : config.description}</p></div>
-      {!readOnly && <Link className="button button-primary" to={`${basePath}/${resource}/new`}><Icon name="plus" />Add {config.singular}</Link>}
+      <h1 className="page-title">{config.title}<span className="title-dot">.</span></h1><p className="page-description">{readOnly ? (canCreate ? 'View and add records for your assigned class.' : 'View the records available to your account.') : config.description}</p></div>
+      {canCreate && <Link className="button button-primary" to={`${basePath}/${resource}/new`}><Icon name="plus" />Add {config.singular}</Link>}
     </header>
     <section className="panel" aria-label={`${config.title} directory`}>
       <div className="toolbar"><div className="toolbar-title"><h2>{readOnly ? 'Your' : 'All'} {config.title.toLowerCase()}</h2><span className="badge">{loading ? '…' : data?.length ?? '—'}</span></div>
@@ -29,9 +29,9 @@ export default function RecordList({ resource, gateway, onSessionExpired, basePa
             {index === 0 ? <Link className="record-link" to={`${basePath}/${resource}/${record[config.id]}`}><span className={`avatar avatar-${resource}`} aria-hidden="true">{String(record[column.name] || '?').split(' ').slice(0, 2).map((part) => part[0]).join('').toUpperCase()}</span><span><span className="table-primary">{record[column.name] || `Record ${record[config.id]}`}</span><span className="table-secondary">{config.singular} · #{record[config.id]}</span></span></Link>
               : <span className={column.name === 'group_name' || column.name === 'note' ? 'badge' : ''}>{formatValue(record[column.name], column.type)}</span>}
           </td>)}<td><Link className="button button-icon" to={`${basePath}/${resource}/${record[config.id]}`} aria-label={`View ${record[config.name] || config.singular}`}><Icon name="chevron" /></Link></td></tr>)}</tbody></table></div>
-          : <div className="empty-state"><span className="empty-icon"><Icon name={config.icon} size={30} /></span><h2>{query ? 'No matches found' : readOnly ? 'No records assigned' : `A fresh start for ${config.title.toLowerCase()}`}</h2>
-            <p>{query ? 'Try another name or clear your search.' : readOnly ? 'Contact your school administrator if you expected to see records here.' : `Add your first ${config.singular} to start organizing your workspace.`}</p>
-            {query ? <button className="button button-secondary" onClick={() => setQuery('')}>Clear search</button> : !readOnly && <Link className="button button-secondary" to={`${basePath}/${resource}/new`}>Add {config.singular}</Link>}</div>}
+          : <div className="empty-state"><span className="empty-icon"><Icon name={config.icon} size={30} /></span><h2>{query ? 'No matches found' : !canCreate ? 'No records assigned' : `A fresh start for ${config.title.toLowerCase()}`}</h2>
+            <p>{query ? 'Try another name or clear your search.' : !canCreate ? 'Contact your school administrator if you expected to see records here.' : `Add your first ${config.singular} to start organizing your workspace.`}</p>
+            {query ? <button className="button button-secondary" onClick={() => setQuery('')}>Clear search</button> : canCreate && <Link className="button button-secondary" to={`${basePath}/${resource}/new`}>Add {config.singular}</Link>}</div>}
       {data && <footer className="table-footer"><span>{records.length} of {data.length} {config.title.toLowerCase()}</span><span>Connected to your school records</span></footer>}
     </section>
     <div className="workspace-note"><Icon name="shield" size={16} /><span>{readOnly ? 'Information provided by your school.' : 'Your workspace, kept in sync. Changes are saved to your school’s records.'}</span></div>

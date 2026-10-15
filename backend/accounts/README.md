@@ -129,3 +129,5 @@ dependencies are declared in `backend/requirements.txt`.
 Updated existing files include Django settings/root URLs/records API, React
 composition/routing/Axios client, record screens, shared shell/dialog, browser
 fixtures, test expectations and documentation. No new frontend dependencies.
+
+Teacher accounts can now POST exams for their assigned group and POST scores for their group’s students/exams. Teacher identity is assigned automatically; administrator approval cannot be assigned by teachers. Student writes and teacher edits/deletes remain forbidden. No migration is required for this change.

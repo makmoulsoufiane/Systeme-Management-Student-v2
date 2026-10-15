@@ -42,7 +42,7 @@ npm run dev
 
 Open `http://localhost:5173/`. Log in with your superuser credentials and change
 the password when prompted. Admins open `/admin/dashboard`, teachers
-`/teacher/dashboard`, and students `/student/dashboard`.
+`/teacher/<account-id>/dashboard`, and students `/student/dashboard`.
 
 Vite proxies `/api/` to `http://127.0.0.1:8000`. Use `DJANGO_API_TARGET` for a
 custom backend address. `frontend/.env.example` documents the frontend API URL;

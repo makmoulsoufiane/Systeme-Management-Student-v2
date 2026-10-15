@@ -65,3 +65,9 @@ controls. First-login password change provides persistent labels and validation.
 Reviewed the rendered desktop teacher dashboard, mobile student dashboard and
 desktop account list: navigation, text hierarchy, wrapping and action controls
 remain readable. Browser verification is recorded separately in the test report.
+
+### Teacher URL navigation
+Teacher dashboard, sidebar and record links include the stable account ID. Existing bookmarks redirect with query/hash preserved. A mismatched ID displays the existing access-denied page with a link to the signed-in teacher’s workspace. Visual layout is unchanged.
+
+### Teacher exam and score entry
+Class exams and Student scores now have Add buttons and creation empty states. Teacher forms omit teacher/administrator selectors. Exam group and score exam are required; options come from scoped endpoints. Missing class/student options direct teachers to their administrator; missing exams instruct them to create an exam first.

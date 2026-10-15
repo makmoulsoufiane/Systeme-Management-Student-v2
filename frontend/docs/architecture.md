@@ -82,3 +82,9 @@ Reference behavior follows [DRF queryset filtering](https://www.django-rest-fram
 [SimpleJWT rotation and revocation settings](https://django-rest-framework-simplejwt.readthedocs.io/en/stable/settings.html),
 and [Django custom-user migration constraints](https://docs.djangoproject.com/en/5.2/topics/auth/customizing/#changing-to-a-custom-user-model-mid-project).
 See the current test report for verification and database limits.
+
+### Teacher URL identity
+`workspacePaths.js` centralizes workspace/dashboard URL construction from the authenticated user. TeacherLayout reads `teacherId` with `useParams()` and compares it to `user.id` before rendering nested pages. The account ID stays stable across name changes. The existing backend queryset filtering remains authoritative.
+
+### Teacher create permissions
+RecordsView permits teacher POST only for exams/scores, assigns the linked Teacher ID and restricts ModelChoiceField querysets before validation. Score validation checks exam/student group consistency. Frontend separates canCreate from readOnly, keeping detail modification unavailable. Stable teacher form configurations omit server-owned fields. No migrations or new dependencies.

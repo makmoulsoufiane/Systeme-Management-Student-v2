@@ -130,3 +130,9 @@ Expected errors use `{ "message": "Human-readable summary", "errors": { "field":
 DELETE inspects Django's deletion collector. If deleting a record would cascade to another record, it returns 409 without deleting it. `SET_NULL` relationships may be cleared by successful deletion. The UI always asks for explicit confirmation first. This protection is specific to the new API; it does not change the legacy HTML deletion views.
 
 Network failures and unexpected 5xx responses may not have this envelope; adapters provide a safe generic error while preserving expected validation/auth distinctions. Do not expose raw Django debug HTML to users.
+
+### Teacher workspace URLs
+The frontend uses the existing authenticated `user.id` as `:teacherId` in `/teacher/:teacherId/dashboard`. No API changes are needed. School record IDs remain separate; the API continues to authorize via the JWT and database profile, never the frontend URL.
+
+### Teacher writes
+`POST /api/exams/` and `POST /api/scores/` accept authenticated teachers with a linked profile and completed password change. Teacher exam creation requires an assigned `group`; score creation requires an assigned `student` and `exam` from the same group. Omit `teacher` (server assigns it) and `admin`. Forged teacher/approval fields return 403; inaccessible or missing relations return 400. PATCH/DELETE remain admin-only. Existing admin behavior is unchanged.
