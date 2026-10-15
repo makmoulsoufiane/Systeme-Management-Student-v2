@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import Icon from './Icon'
 
-const navigation = [
+const defaultNavigation = [
   { path: '/students', label: 'Students', icon: 'students' },
   { path: '/teachers', label: 'Teachers', icon: 'teachers' },
   { path: '/groups', label: 'Groups', icon: 'groups' },
@@ -21,7 +21,7 @@ export function CampusMark() {
   )
 }
 
-export default function AppShell({ user, onLogout, children }) {
+export default function AppShell({ user, onLogout, children, navigation = defaultNavigation, roleLabel = 'Staff' }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const displayName = user?.display_name || user?.username || 'Staff member'
 
@@ -33,7 +33,7 @@ export default function AppShell({ user, onLogout, children }) {
           <CampusMark />
           <div>
             <span className="brand-name">Campus<span className="brand-dot">.</span></span>
-            <span className="brand-subtitle">Staff workspace</span>
+            <span className="brand-subtitle">{roleLabel} workspace</span>
           </div>
           <button
             className="button button-icon mobile-toggle"
@@ -70,7 +70,7 @@ export default function AppShell({ user, onLogout, children }) {
             <span className="avatar account-avatar">{displayName.charAt(0).toUpperCase()}</span>
             <div className="account-copy">
               <strong>{displayName}</strong>
-              <span>Staff account</span>
+              <span>{roleLabel} account</span>
             </div>
             <button className="button button-icon" onClick={onLogout} aria-label="Sign out" title="Sign out">
               <Icon name="logout" size={18} />
@@ -81,7 +81,7 @@ export default function AppShell({ user, onLogout, children }) {
       <div className="workspace">
         <header className="workspace-header">
           <span className="workspace-label"><Icon name="book" size={17} />Academic workspace</span>
-          <span className="workspace-status"><span />Staff portal</span>
+          <span className="workspace-status"><span />{roleLabel} portal</span>
         </header>
         <main id="main-content" className="main-content" tabIndex={-1}>{children}</main>
         <footer className="workspace-footer">

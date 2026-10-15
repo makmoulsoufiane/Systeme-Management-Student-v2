@@ -1,8 +1,7 @@
-"""Opt-in SQLite sandbox using the current models, never the existing database.
+"""Opt-in SQLite sandbox, never the existing database.
 
 Set SMS_SQLITE_PATH to a new disposable path when running a local server, then
-use migrate --run-syncdb --settings=sms.sqlite_settings. This sandbox builds
-application tables from current models independently of historical migrations.
+use migrate --settings=sms.sqlite_settings. All migrations run normally.
 """
 
 import os
@@ -16,6 +15,3 @@ DATABASES = {
     }
 }
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
-MIGRATION_MODULES = {
-    app: None for app in ('Admin', 'Teachers', 'Group', 'student', 'exam', 'Scores', 'student_exam')
-}

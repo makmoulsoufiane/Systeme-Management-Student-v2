@@ -1,5 +1,7 @@
 # Staff portal architecture
 
+> The 2026-10-15 role-based update below supersedes earlier staff-only/session assumptions. See [current API contract](api-contract.md).
+
 Status: implementation decisions and source review for the first release. Runtime verification is recorded in the test report.
 
 ## Responsibilities and dependencies
@@ -53,3 +55,30 @@ Task and scope: TASK-009, session, resource forms/details, transport errors and 
 - Adapter validation improved: list elements and records require native integer IDs; configured date fields are checked before reaching presentation. This is focused boundary validation, not a full JSON schema contract.
 
 All identified blocking review findings were corrected and the final verification passed. Configured PostgreSQL connectivity remains unverified because the read-only probe was sandbox-denied and escalation was interrupted; no writes or migrations were applied there. The inspected migration graph has no conflicts. The isolated API/browser results establish implemented behavior without claiming that external database is reachable. Chromium coverage does not imply Safari, Firefox, physical-device or full screen-reader coverage.
+
+## Role-based update — 2026-10-15
+
+- `accounts` owns the custom User, profile links, DRF permissions, JWT serializers,
+  and protected account management. Existing school model fields and IDs remain.
+- `sms.api.RecordsView.get_queryset()` owns data visibility for every list/detail;
+  nonadmin writes are rejected before validation. Legacy HTML routes are unmounted.
+- `AuthProvider` owns user/role/tokens and server verification at startup. A small
+  injected session store uses sessionStorage. Passwords are never persisted.
+- Axios owns Bearer attachment and one shared in-flight refresh, rotates stored
+  tokens and retries a request once. Login skips refresh. A pending refresh cannot
+  restore a cleared session. Auth operation revisions prevent late password/login
+  responses from restoring credentials after sign-out.
+- Auth/account gateway owns HTTP transport. Record screens continue using their
+  injected gateway; no HTTP implementation imports were added to UI components.
+- Three layouts compose a shared shell with distinct navigation. School-record
+  screens accept a URL prefix and read-only mode; backend permissions remain
+  authoritative. ProtectedRoute checks authentication, onboarding and allowedRoles.
+- Account IDs and school record IDs remain distinct. Account creation requires an
+  existing record and creates the user/profile in one database transaction.
+- Custom User reuses auth_user; staged migrations support adoption. Replacement
+  Group/Scores migrations permit fresh installs without replaying duplicate fields.
+
+Reference behavior follows [DRF queryset filtering](https://www.django-rest-framework.org/api-guide/generic-views/),
+[SimpleJWT rotation and revocation settings](https://django-rest-framework-simplejwt.readthedocs.io/en/stable/settings.html),
+and [Django custom-user migration constraints](https://docs.djangoproject.com/en/5.2/topics/auth/customizing/#changing-to-a-custom-user-model-mid-project).
+See the current test report for verification and database limits.

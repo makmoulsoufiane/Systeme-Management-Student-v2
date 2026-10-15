@@ -2,17 +2,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { createStaffGateway } from './staffGateway.js';
 
 describe('staff gateway', () => {
-  it('uses the rotated session token when saving a record', async () => {
-    const http = { request: vi.fn().mockResolvedValueOnce({ data: { user: null, csrfToken: 'before-login' } })
-      .mockResolvedValueOnce({ data: { user: { username: 'staff' }, csrfToken: 'after-login' } })
-      .mockResolvedValueOnce({ data: { record: { id_student: 1 } } }) };
-    const gateway = createStaffGateway(http);
-    await gateway.session();
-    await gateway.login({ username: 'staff', password: 'test' });
-    await gateway.save('students', null, { fullname: 'Lina' });
-    expect(http.request.mock.calls[1][0].headers).toEqual({ 'X-CSRFToken': 'before-login' });
-    expect(http.request.mock.calls[2][0]).toMatchObject({ method: 'POST', url: 'students/', headers: { 'X-CSRFToken': 'after-login' } });
-  });
   it('retains server field errors and rejects HTML responses', async () => {
     const http = { request: vi.fn().mockRejectedValueOnce({ response: { status: 400, data: { message: 'Invalid fields', errors: { group: ['Choose a group.'] } } } })
       .mockResolvedValueOnce({ data: '<html>Login</html>' }) };

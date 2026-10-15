@@ -6,7 +6,7 @@ import { ErrorState, LoadingState } from '../../../components/Feedback.jsx';
 import { formatValue, resources } from '../domain/resources.js';
 import { useResource } from './useResource.js';
 
-export default function RecordDetail({ resource, gateway, onSessionExpired }) {
+export default function RecordDetail({ resource, gateway, onSessionExpired, basePath = '', readOnly = false }) {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,25 +21,25 @@ export default function RecordDetail({ resource, gateway, onSessionExpired }) {
     if (pending) return;
     setPending(true);
     setDeleteError(null);
-    try { await gateway.remove(resource, id); navigate(`/${resource}`, { replace: true }); }
+    try { await gateway.remove(resource, id); navigate(`${basePath}/${resource}`, { replace: true }); }
     catch (failure) { if (failure.status === 401) onSessionExpired(); setDeleteError(failure); }
     finally { setPending(false); }
   }
 
   return <>
-    <Link className="breadcrumb" to={`/${resource}`}><Icon name="arrow-left" />All {config.title.toLowerCase()}</Link>
+    <Link className="breadcrumb" to={`${basePath}/${resource}`}><Icon name="arrow-left" />All {config.title.toLowerCase()}</Link>
     {loading ? <LoadingState /> : error ? <ErrorState error={error} onRetry={() => setRevision(revision + 1)} /> : <>
       <header className="page-heading"><div><p className="eyebrow">{config.singular.toUpperCase()} RECORD · #{id}</p><h1 className="page-title">{record[config.name] || `${config.singular} #${id}`}</h1><p className="page-description">Review this record and its related information.</p></div>
-        <Link className="button button-primary" to={`/${resource}/${id}/edit`}><Icon name="edit" />Edit {config.singular}</Link></header>
+        {!readOnly && <Link className="button button-primary" to={`${basePath}/${resource}/${id}/edit`}><Icon name="edit" />Edit {config.singular}</Link>}</header>
       {location.state?.notice && <p className="status-message" role="status"><Icon name="check" />{location.state.notice}</p>}
       <section className="panel detail-panel"><div className="form-section-heading"><Icon name={config.icon} /><h2>Record details</h2></div><dl className="detail-grid">
         {config.fields.map((field) => <div className="detail-item" key={field.name}><dt>{field.label}</dt><dd>{field.source && record[field.name]
-          ? field.source === 'admins' ? record.admin_name || `#${record.admin}`
-            : <Link to={`/${field.source}/${record[field.name]}`}>{record[`${field.name}_name`] || `#${record[field.name]}`}</Link>
+          ? field.source === 'admins' || readOnly ? record[`${field.name}_name`] || `#${record[field.name]}`
+            : <Link to={`${basePath}/${field.source}/${record[field.name]}`}>{record[`${field.name}_name`] || `#${record[field.name]}`}</Link>
           : formatValue(record[field.name], field.type)}</dd></div>)}
         {resource === 'scores' && <div className="detail-item"><dt>Recorded on</dt><dd>{formatValue(record.created_at, 'datetime-local')}</dd></div>}
       </dl></section>
-      <section className="danger-zone"><div><h2>Delete this {config.singular}</h2><p>This permanently removes the record. Related records may prevent deletion.</p></div><button className="button button-secondary danger-text" onClick={() => { setDeleteError(null); setConfirming(true); }}><Icon name="trash" />Delete {config.singular}</button></section>
+      {!readOnly && <section className="danger-zone"><div><h2>Delete this {config.singular}</h2><p>This permanently removes the record. Related records may prevent deletion.</p></div><button className="button button-secondary danger-text" onClick={() => { setDeleteError(null); setConfirming(true); }}><Icon name="trash" />Delete {config.singular}</button></section>}
     </>}
     {confirming && <ConfirmDialog title={`Delete this ${config.singular}?`} pending={pending} error={deleteError} onClose={() => setConfirming(false)} onConfirm={remove}><p>You’re about to permanently delete <strong>{record?.[config.name] || `record #${id}`}</strong>. This action cannot be undone.</p></ConfirmDialog>}
   </>;

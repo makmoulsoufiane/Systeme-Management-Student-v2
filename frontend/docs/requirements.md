@@ -1,5 +1,7 @@
 # Staff portal requirements
 
+> The 2026-10-15 role-based update below supersedes earlier staff-only/session assumptions. See [current API contract](api-contract.md).
+
 Approved scope: a staff portal using real Django data. Deliver a small, usable React application for students, teachers, groups, exams, and scores. This document records the first release, not a claim that every acceptance criterion has already passed; see [backlog](backlog.md) and [test report](test-report.md) for delivery evidence.
 
 ## Users and scope
@@ -59,3 +61,23 @@ The configured database is PostgreSQL, sourced from local environment settings. 
 ## Release verification
 
 Verify anonymous denial, staff login, CSRF rejection, session persistence, logout, each resource's create/read/update/delete behavior, invalid relationships, duplicate group teacher, finite scores, deletion dependency protection and read-only admins. Verify React's loading/error/empty paths, validation feedback, search, mutations and route handling. Run frontend build, relevant behavior tests and Django checks/tests; record exact results in the test report. Browser visual, keyboard and narrow-layout checks must be reported as performed or unverified, never assumed from a successful build.
+
+## Role-based release — 2026-10-15
+
+The approved scope now includes admin, teacher and student accounts. This replaces
+the earlier staff-only session scope. No public registration or automatic role
+assignment from supplied request fields is permitted.
+
+| ID | Requirement | Acceptance |
+| --- | --- | --- |
+| RBAC-001 | Custom User and profiles | AbstractUser role, forced password default, unique teacher/student profile; existing account adoption retains IDs/passwords |
+| RBAC-002 | Backend authorization | Admin-only account writes; teacher/student data filtered for both list/detail; unrelated IDs denied; missing profiles fail closed |
+| RBAC-003 | JWT lifecycle | Login includes tokens/role/username/password status; refresh rotates; deactivation rejects tokens; password change validates current/new and revokes old tokens |
+| RBAC-004 | Role workspaces | Refresh restores verified identity; role dashboards/layouts; anonymous → login, wrong role → unauthorized, forced change → password page |
+| RBAC-005 | Account management UI | Admin lists, creates linked accounts, edits details and deactivates without deleting school records |
+| RBAC-006 | Reproducible verification | Real migration graph, isolated existing-user adoption, backend ownership tests, frontend route/refresh tests, browser onboarding and documented commands |
+
+Teachers and students receive read-only views. Each account is linked explicitly
+to an existing school record, avoiding duplicate enrollment/staff data. Current
+Group.teacher cardinality is retained. Per-class write/grade-entry workflows and
+multi-class teacher assignment are outside this request's implemented scope.

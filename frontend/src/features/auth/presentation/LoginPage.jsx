@@ -45,7 +45,7 @@ export default function LoginPage({ gateway, onLogin }) {
         </div>
 
         <div className="login-intro">
-          <p className="eyebrow"><span aria-hidden="true" />YOUR ACADEMIC WORKSPACE</p>
+          <p className="eyebrow"><span aria-hidden="true" />YOUR SCHOOL WORKSPACE</p>
           <h1 id="login-title">Welcome to<br /><span>Campus.</span></h1>
           <p className="page-description">Manage students, teachers, groups, exams, and scores in one place.</p>
         </div>
@@ -65,7 +65,7 @@ export default function LoginPage({ gateway, onLogin }) {
           </button>
         </form>
 
-        <p className="login-note"><Icon name="shield" size={17} />Sign in with your school staff account. Contact your administrator if you need access.</p>
+        <p className="login-note"><Icon name="shield" size={17} />Sign in with your school account. Contact your administrator if you need access.</p>
       </section>
       <p className="login-footer">Less administration. <span>More possibility.</span></p>
     </main>

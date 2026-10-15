@@ -172,3 +172,41 @@ Configured PostgreSQL connectivity was not verified: the read-only probe was san
 - Verification: production build; desktop/mobile existing sign-in browser tests; screenshot review; ad hoc motion and 320px/390px layout checks.
 - Evidence: build and two browser tests passed; animation state and responsive checks passed. See the login-update section of the test report.
 - Blocker / next action: none.
+
+## Role-based iteration — 2026-10-15
+
+### TASK-012 — DRF roles, JWT and data isolation
+
+- Epic / requirements: role-based school access; RBAC-001–003.
+- Story: As a school user, I can sign in and access only authorized data.
+- Priority / size / owner: Must / M / implementation.
+- Dependencies: TASK-011. Status: Done.
+- Scope: accounts app, staged user adoption, DRF records, CORS, dependencies and migration replacements.
+- Acceptance: role permissions, forced password gate, admin-only account creation/edit/deactivation, scoped list/detail access, revoked old tokens, working migrations.
+- Verification: isolated API tests and adoption rehearsal, migration consistency check.
+- Evidence: final 17 backend tests passed, including existing-user migration adoption; Django check passed and no model drift detected.
+- Blocker / next action: none for implementation; configured PostgreSQL migration remains an operator step.
+
+### TASK-013 — React role workspaces and account management
+
+- Epic / requirements: role-based school access; RBAC-004–005.
+- Story: As a user, I see my workspace after onboarding; as admin, I manage login access.
+- Priority / size / owner: Must / M / implementation.
+- Dependencies: TASK-012. Status: Review.
+- Scope: AuthContext, session store, refresh interceptor, route guards, role layouts/dashboards and admin account pages.
+- Acceptance: login/refresh persistence, required password change, wrong-role redirects, separate navigation, account create/edit/deactivate and read-only nonadmin views.
+- Verification: frontend unit tests, production build, desktop/mobile real-API browser flows, screenshot review.
+- Evidence: final 25 unit tests and production build passed; role/account screenshots reviewed; latest completed browser run passed 11/12 tests.
+- Blocker / next action: browser verification remains open after a mobile initial-load timeout; final rerun was declined. Core implementation is complete.
+
+### TASK-014 — migration and run documentation
+
+- Epic / requirements: role-based school access; RBAC-006.
+- Story: As maintainer, I can upgrade existing accounts and run the new portal.
+- Priority / size / owner: Must / S / implementation.
+- Dependencies: TASK-012–013. Status: Done (documentation delivered; TASK-013 browser limit documented).
+- Scope: README, accounts guide, API contract, design/architecture/requirements and verification report.
+- Acceptance: list new files, fresh/existing startup, profile prerequisites, exact checks and unverified PostgreSQL limitations.
+- Verification: compare documentation to source and test evidence.
+- Evidence: fresh migration and standard existing-user adoption tested in disposable SQLite; configured database unchanged.
+- Blocker / next action: none for documentation; follow the existing-database upgrade guide before running against school data.

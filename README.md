@@ -1,48 +1,38 @@
-# Systeme-Management-Student-v2
+# School management system
 
-## Project structure
+React + Django REST Framework + SimpleJWT, with three roles: **admin**, **teacher**,
+and **student**. The existing glass login page opens the appropriate workspace.
 
-```text
-backend/
-  manage.py
-  sms/              # Django settings, URLs, ASGI, and WSGI
-  student/          # Django applications, with their models and migrations
-  Admin/
-  Teachers/
-  Group/
-  Scores/
-  exam/
-  student_exam/
-  accounts/
-  userauth/
-  static/
-  staticfiles/
-  media/
-frontend/           # React staff portal powered by Vite
-env/                # Local Python virtual environment (ignored by Git)
-```
+## Start the backend
 
-Existing application templates remain inside their Django applications.
-Local database configuration is stored in `backend/.env` (ignored by Git).
-
-## Run the backend
-
-From the project root, activate the existing environment and start Django:
+From the repository root:
 
 ```sh
 source env/bin/activate
+pip install -r backend/requirements.txt
+```
+
+If this database already used the previous login system, follow the
+[one-time existing-user upgrade](backend/accounts/README.md#existing-database-one-time-upgrade)
+before starting the server. It preserves existing account IDs and passwords.
+The configured database has not been migrated automatically.
+
+For a **fresh** database, configure `backend/.env` using
+[the example](backend/.env.example), then run:
+
+```sh
+python backend/manage.py migrate
+python backend/manage.py createsuperuser
 python backend/manage.py runserver
 ```
 
-To check the Django configuration:
+If you do not have `env/`, create it with `python3 -m venv env` first.
+Use a private `SECRET_KEY` in `.env` for stable JWT sessions. The backend defaults
+to PostgreSQL; a disposable SQLite setup is documented in the upgrade guide.
 
-```sh
-python backend/manage.py check
-```
+## Start React
 
-## Run the frontend
-
-Use Node.js 20.19+ or 22.12+ and run:
+In another terminal, using Node.js 20.19+ or 22.12+:
 
 ```sh
 cd frontend
@@ -50,55 +40,55 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints. Sign in with an active Django account with `is_staff=True`.
-If you need a new staff account, run `python backend/manage.py createsuperuser`
-from the project root with your Python environment activated.
+Open `http://localhost:5173/`. Log in with your superuser credentials and change
+the password when prompted. Admins open `/admin/dashboard`, teachers
+`/teacher/dashboard`, and students `/student/dashboard`.
 
-The portal supports searching, viewing, creating, editing, and deleting students,
-teachers, groups, exams, and scores. It connects to the JSON API under `/api/`.
-Vite proxies these requests to `http://127.0.0.1:8000` so session cookies and CSRF
-work on the same browser origin. Set the shell variable `DJANGO_API_TARGET` to
-use a different backend address. `frontend/.env.example` documents the API URL.
+Vite proxies `/api/` to `http://127.0.0.1:8000`. Use `DJANGO_API_TARGET` for a
+custom backend address. `frontend/.env.example` documents the frontend API URL;
+`CORS_ALLOWED_ORIGINS` in backend settings permits the configured React origins.
+Production needs an SPA route fallback and an API proxy or configured CORS.
 
-Administrator records are school data, separate from login accounts. Create an
-administrator record in Django admin (`http://127.0.0.1:8000/admin/`) before
-creating groups or students. Create a group before adding its students. No
-sample records or accounts are added to your configured database by this setup.
+## Create teacher and student accounts
 
-The normal backend uses the PostgreSQL settings in `backend/.env`. The opt-in
-`sms.sqlite_settings` is an isolated development/test sandbox, not a migration
-of that database. It builds application tables directly from the current models
-for disposable fixtures; normal database migrations remain separate.
+1. After changing the admin password, create an administrator school record in
+   Django admin at `http://127.0.0.1:8000/admin/` if none exists. It is separate
+   from the login account.
+2. Use the admin workspace's school-record pages to add teachers, groups and
+   students. Assign teachers and students to their groups.
+3. Open **Teacher accounts** or **Student accounts**, choose **Create account**,
+   select the school record, and enter a username and temporary password.
+4. Share those credentials privately. The new user must change their password
+   before accessing school data. There is no public registration.
+5. Use **Edit** to update account details or reactivate access; **Deactivate**
+   blocks login and invalidates tokens while retaining school records.
 
-Run `npm run build` from `frontend/` to create a production build. A deployment
-must serve SPA routes with an `index.html` fallback and proxy `/api/` to Django
-on the same origin; Vite's development proxy is not part of the built files.
-Production hardening of the existing Django settings is a separate deployment task.
+Teachers and students have read-only workspaces filtered by the backend.
+Admins retain school-record CRUD. Backend permissions enforce all access rules;
+React route guards provide navigation and feedback only.
 
-## Verification
-
-From the repository root:
-
-```sh
-env/bin/python backend/manage.py check
-env/bin/python backend/manage.py test sms.api --settings=sms.test_settings --noinput
-```
-
-From `frontend/`:
+## Verify
 
 ```sh
+# Repository root: isolated database, real migrations
+env/bin/python backend/manage.py test accounts sms.api --settings=sms.test_settings --noinput
+env/bin/python backend/manage.py check --settings=sms.sqlite_settings
+env/bin/python backend/manage.py makemigrations --check --dry-run --settings=sms.sqlite_settings
+
+# Frontend
+cd frontend
 npm test
 npm run build
 npx playwright install chromium
 npm run test:e2e
 ```
 
-Browser tests start disposable Django and Vite servers on ports 8001 and 5174.
-They create synthetic records in a temporary SQLite database, exercise the real
-API in desktop/mobile Chromium, and never use the configured school database.
-Keep those two ports available. Screenshots and failure traces are written to
-the ignored `frontend/test-results/` directory.
+Browser tests use temporary SQLite data and isolated Django/Vite servers on
+ports 8001/5174, never the configured school database. Test screenshots and
+traces are ignored by Git.
 
-See [requirements](frontend/docs/requirements.md), [API contract](frontend/docs/api-contract.md),
-[design](frontend/docs/design.md), [architecture](frontend/docs/architecture.md),
-[backlog](frontend/docs/backlog.md), and [verification report](frontend/docs/test-report.md).
+See [new files and migration details](backend/accounts/README.md),
+[API contract](frontend/docs/api-contract.md),
+[requirements](frontend/docs/requirements.md),
+[architecture](frontend/docs/architecture.md), and
+[test report](frontend/docs/test-report.md).

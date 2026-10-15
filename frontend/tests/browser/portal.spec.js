@@ -5,7 +5,8 @@ async function signIn(page) {
   await page.getByLabel('Username').fill('browser-staff');
   await page.getByLabel('Password').fill('browser-tests-only');
   await page.getByRole('button', { name: 'Sign in to workspace' }).click();
-  await expect(page.getByRole('heading', { name: 'Students.', exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/admin\/dashboard$/);
+  await page.goto('/admin/records/students');
 }
 
 test('staff can sign in, search, navigate and sign out', async ({ page }, info) => {
@@ -17,9 +18,11 @@ test('staff can sign in, search, navigate and sign out', async ({ page }, info) 
   await page.getByLabel('Username').fill('browser-staff');
   await page.getByLabel('Password').fill('wrong-password');
   await page.getByRole('button', { name: 'Sign in to workspace' }).click();
-  await expect(page.getByRole('alert')).toContainText('incorrect');
+  await expect(page.getByRole('alert')).toContainText('No active account');
   await page.getByLabel('Password').fill('browser-tests-only');
   await page.getByRole('button', { name: 'Sign in to workspace' }).click();
+  await expect(page).toHaveURL(/admin\/dashboard$/);
+  await page.goto('/admin/records/students');
   await expect(page.getByRole('link', { name: /Maya Benali/ }).first()).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: `test-results/${info.project.name}-students.png`, fullPage: true });
@@ -48,7 +51,7 @@ test('staff can create, edit and delete every managed resource', async ({ page }
     { resource: 'scores', singular: 'score', fields: { Score: '0' }, selects: { Student: 'Maya Benali' }, nameField: 'Score' },
   ];
   for (const item of cases) {
-    await page.goto(`/${item.resource}/new`);
+    await page.goto(`/admin/records/${item.resource}/new`);
     for (const [label, value] of Object.entries(item.fields)) await page.getByLabel(label, { exact: false }).fill(value);
     for (const [label, value] of Object.entries(item.selects || {})) await page.getByLabel(label, { exact: false }).selectOption({ label: value });
     if (item.resource === 'students') await page.screenshot({ path: `test-results/${info.project.name}-form.png`, fullPage: true });
@@ -65,17 +68,17 @@ test('staff can create, edit and delete every managed resource', async ({ page }
     await expect(page.getByRole('dialog')).not.toBeVisible();
     await page.getByRole('button', { name: `Delete ${item.singular}` }).click();
     await page.getByRole('button', { name: 'Delete record', exact: true }).click();
-    await expect(page).toHaveURL(new RegExp(`/${item.resource}$`));
+    await expect(page).toHaveURL(new RegExp(`/admin/records/${item.resource}$`));
   }
 });
 
 test('protects dependent records and supports keyboard and narrow layouts', async ({ page }, info) => {
   await signIn(page);
-  await page.goto('/groups/1');
+  await page.goto('/admin/records/groups/1');
   await expect(page.getByRole('heading', { name: 'Science A' })).toBeVisible();
   await page.getByRole('button', { name: 'Delete group' }).click();
   await page.getByRole('button', { name: 'Delete record', exact: true }).click();
-  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('dependent records');
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('linked account');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).not.toBeVisible();
   await expect(page.getByRole('button', { name: 'Delete group' })).toBeFocused();

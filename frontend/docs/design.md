@@ -49,3 +49,19 @@ motion. Reduced transparency and unsupported backdrop filtering use an opaque
 card. Decorative elements are hidden from assistive technology and ignore pointer
 events. Inputs use 16px text on mobile. Reviewed the refreshed desktop/mobile
 screenshots and verified no page overflow at 390px and 320px.
+
+## Role workspaces — 2026-10-15
+
+The existing readable system typography and glass login are retained. Admin,
+teacher and student sidebars expose their supported destinations. Dashboard cards
+link directly to role-specific tasks; no invented statistics are displayed.
+
+Admin account lists distinguish login usernames, linked school records, active
+status and required password changes. Create-account forms link an existing record;
+missing records provide a direct creation link. Deactivation uses a confirmation
+that explains record preservation. Teacher/student lists and details omit write
+controls. First-login password change provides persistent labels and validation.
+
+Reviewed the rendered desktop teacher dashboard, mobile student dashboard and
+desktop account list: navigation, text hierarchy, wrapping and action controls
+remain readable. Browser verification is recorded separately in the test report.

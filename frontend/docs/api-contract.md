@@ -1,18 +1,70 @@
-# Staff portal API contract
+# School portal API contract
 
-Source-verified implementation: `backend/sms/api/urls.py`, `views.py`, and `resources.py`, mounted at `/api/` in `backend/sms/urls.py`. This contract describes the new JSON API, not the existing HTML routes. Runtime test evidence belongs in [test-report.md](test-report.md); reading source alone does not verify the configured database connection.
+Current API: Django REST Framework and SimpleJWT. The role-based contract below
+supersedes the original staff session endpoints.
 
-## Authentication and transport
+## Authentication
 
-Use same-origin `/api/` requests; the Vite development proxy forwards them to Django. Production should route frontend and `/api/` under one origin. No permissive cross-origin policy is assumed. The HTTP client sends cookies and JSON (`Content-Type: application/json`). Obtain `csrfToken` from the session response and include it as `X-CSRFToken` on login, logout, POST, PATCH, and DELETE. Use the latest returned token after login because Django rotates it. Never persist credentials in browser storage.
+Requests use JSON. Protected requests carry `Authorization: Bearer <access>`.
+No public registration endpoint exists. Login and refresh are public by design;
+all other API views declare role/authentication permissions explicitly.
 
-| Method | Path | Request | Success |
+| Method | Path | Request / result |
+| --- | --- | --- |
+| POST | `/api/auth/login/` | `{username, password}` → `{access, refresh, role, username, must_change_password, user}` |
+| POST | `/api/auth/refresh/` | `{refresh}` → rotated token pair and current user/role/password status |
+| GET | `/api/auth/me/` | Current `{user, role, username, must_change_password}` |
+| POST | `/api/auth/change-password/` | `{current_password, new_password}` → new token pair and user; invalidates previous tokens |
+| POST | `/api/auth/logout/` | `{refresh}` → 204; blacklists that refresh token |
+
+User contains `id`, `username`, `first_name`, `last_name`, `email`, `display_name`,
+`role`, `must_change_password`, `is_active`. Login defaults to a forced password
+change for new accounts. All records/account-management views return 403 with
+`code: password_change_required` until it is completed. Invalid/expired tokens
+return 401. Wrong roles return 403. Unrelated object IDs return 404.
+
+Access tokens expire in five minutes; refresh tokens in one day, rotating on use.
+Inactive users and old password/token versions are rejected on access and refresh.
+Roles come from the database. A JWT role claim cannot grant privileges.
+
+## Admin account management
+
+All these routes require `IsAdmin` AND `PasswordChanged`.
+
+| Method | Path | Behavior |
+| --- | --- | --- |
+| GET, POST | `/api/admin/teachers/` | List/create teacher login accounts |
+| GET, POST | `/api/admin/students/` | List/create student login accounts |
+| GET, PATCH | `/api/admin/teachers/{user_id}/` | Read/update teacher account |
+| GET, PATCH | `/api/admin/students/{user_id}/` | Read/update student account |
+
+Create body: `{username, password, record_id, first_name?, last_name?, email?, is_active?}`.
+`record_id` is an existing, unlinked Teacher/Student school record ID. User and
+profile are created atomically. Role is fixed by the endpoint; `role`, `is_staff`,
+`is_superuser`, `must_change_password` and unknown fields are rejected. Passwords
+use Django validation/hashing and are never returned. Duplicate names/profile
+links fail without leaving an orphan user.
+
+PATCH permits username, first_name, last_name, email and is_active. Deactivate with
+`{is_active: false}`; DELETE is unsupported. Password changes and profile relinking
+are not permitted through PATCH. Responses are account objects (list responses are
+arrays), with `record: {id, name}` and no password. School records retain their
+original IDs; account `id` is the distinct login-user ID.
+
+## Role visibility
+
+| Resource | Admin | Teacher | Student |
 | --- | --- | --- | --- |
-| GET | `/api/session/` | None | `200 {"user": null, "csrfToken": "…"}` or authenticated user |
-| POST | `/api/login/` | `{"username":"staff","password":"…"}` | `200` session response |
-| POST | `/api/logout/` | None required | `200` session response with `user: null` |
+| students | All, CRUD | Students in assigned classes, read only | Own profile only |
+| teachers | All, CRUD | Own teacher record only | None |
+| groups | All, CRUD | Assigned classes only | Own class only |
+| exams | All, CRUD | Exams belonging to assigned classes | Exams belonging to own class |
+| scores | All, CRUD | Scores of students in assigned classes | Own scores only |
+| admins | All, read only | None | None |
 
-Authenticated user shape: `{ "id": 1, "username": "staff", "display_name": "Staff Name" }`. An active Django staff account is required. Missing/incorrect credentials yield 400/401; nonstaff credentials yield 403. Anonymous resource requests yield 401; authenticated nonstaff resource requests yield 403. Session bootstrap is public and returns `user: null` plus a CSRF token for an existing nonstaff session, allowing the portal to show sign-in and switch to a staff account. It does not grant resource access to the nonstaff account. Django CSRF failures yield a JSON 403 with a refresh/retry message.
+`get_queryset()` applies the same filters to lists and detail lookups. Missing
+profiles return no records. Teacher/student writes are rejected regardless of
+record ownership. Related linked-account records cannot be cascade deleted.
 
 ## Resources and operations
 
@@ -20,13 +72,13 @@ Authenticated user shape: `{ "id": 1, "username": "staff", "display_name": "Staf
 
 | Method | Path | Response |
 | --- | --- | --- |
-| GET | `/api/{resource}/` | `200 {"results": [record, …]}`; all records ordered by primary key |
+| GET | `/api/{resource}/` | `200 {"results": [record, …]}`; permitted records ordered by primary key |
 | GET | `/api/{resource}/{id}/` | `200 {"record": record}` |
 | POST | `/api/{resource}/` | JSON editable fields; `201 {"record": record}` |
 | PATCH | `/api/{resource}/{id}/` | JSON changed editable fields; `200 {"record": record}` |
 | DELETE | `/api/{resource}/{id}/` | `204` with empty body |
 
-Admins are GET-only; writes return 405. PUT is unsupported. Collection PATCH/DELETE and detail POST are unsupported. There is no pagination, server search, filter or sort contract; the first-release frontend searches the returned records locally. Large datasets will need a subsequent pagination/search change across API and UI.
+Administrator school records are GET-only; writes return 403. Other writes require the admin role. PUT is unsupported. Collection PATCH/DELETE and detail POST are unsupported. There is no pagination, server search, filter or sort contract; the first-release frontend searches the returned records locally. Large datasets will need a subsequent pagination/search change across API and UI.
 
 ## Fields
 
@@ -70,9 +122,9 @@ Expected errors use `{ "message": "Human-readable summary", "errors": { "field":
 | --- | --- | --- |
 | 400 | Invalid JSON, non-object payload, validation, unknown/read-only field or nonscalar field | Retain form values; show summary and field errors |
 | 401 | Authentication required or incorrect credentials | Return to sign-in or show credential error |
-| 403 | Staff access denied or CSRF failure | Show returned message; refresh session/token as appropriate |
+| 403 | Wrong role or required password change | Show access denied or open the password-change page |
 | 404 | Unknown resource or missing record | Show unavailable record and return/retry action |
-| 405 | Unsupported method or Admin mutation | Treat as unsupported operation; never expose Admin write controls |
+| 405 | Unsupported method | Treat as unsupported operation; never expose Admin write controls |
 | 409 | Dependent records prevent deletion or concurrent integrity conflict | Show the conflict and retain current record/form |
 
 DELETE inspects Django's deletion collector. If deleting a record would cascade to another record, it returns 409 without deleting it. `SET_NULL` relationships may be cleared by successful deletion. The UI always asks for explicit confirmation first. This protection is specific to the new API; it does not change the legacy HTML deletion views.

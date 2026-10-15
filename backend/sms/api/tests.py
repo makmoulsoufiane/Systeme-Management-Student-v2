@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
+from django.test import TestCase
+from rest_framework.test import APIClient
+from accounts.serializers import LoginSerializer
 
 from Admin.models import Admin
 from Group.models import Group
@@ -12,7 +14,7 @@ from student.models import Student
 class StaffApiTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.staff = get_user_model().objects.create_user('staff', password='test-password', is_staff=True)
+        cls.staff = get_user_model().objects.create_user('staff', password='test-password', role='admin', must_change_password=False)
         cls.member = get_user_model().objects.create_user('member', password='test-password')
         cls.admin = Admin.objects.create(fullname='School administrator', address='Main office', date_of_inscription='2025-01-01')
         cls.teacher = Teacher.objects.create(fullname='Amina', adress='Rabat', date_of_inscription='2025-01-01', admin=cls.admin)
@@ -21,51 +23,11 @@ class StaffApiTests(TestCase):
         cls.exam = Exam.objects.create(name='Midterm', place='Room 1', date_hour='2026-10-15T10:00:00Z', teacher=cls.teacher, group=cls.group)
 
     def setUp(self):
-        self.client.force_login(self.staff)
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {LoginSerializer.get_token(self.staff).access_token}')
 
     def write(self, method, url, payload):
         return getattr(self.client, method)(url, payload, content_type='application/json')
-
-    def test_resources_require_authenticated_staff(self):
-        self.client.logout()
-        for resource in ('students', 'teachers', 'groups', 'exams', 'scores', 'admins'):
-            with self.subTest(resource=resource):
-                self.assertEqual(self.client.get(f'/api/{resource}/').status_code, 401)
-        self.client.force_login(self.member)
-        self.assertEqual(self.client.get('/api/students/').status_code, 403)
-        session = self.client.get('/api/session/')
-        self.assertEqual(session.status_code, 200)
-        self.assertIsNone(session.json()['user'])
-        self.assertTrue(session.json()['csrfToken'])
-        response = self.write('post', '/api/login/', {'username': 'staff', 'password': 'test-password'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.client.get('/api/students/').status_code, 200)
-
-    def test_login_logout_and_csrf_enforcement(self):
-        client = Client(enforce_csrf_checks=True)
-        response = client.get('/api/session/')
-        self.assertIsNone(response.json()['user'])
-        token = response.json()['csrfToken']
-        credentials = {'username': 'staff', 'password': 'test-password'}
-        missing_token = client.post('/api/login/', credentials, content_type='application/json')
-        self.assertEqual(missing_token.status_code, 403)
-        self.assertIn('message', missing_token.json())
-        signed_in = client.post('/api/login/', credentials, content_type='application/json', HTTP_X_CSRFTOKEN=token)
-        self.assertEqual(signed_in.status_code, 200)
-        self.assertEqual(signed_in.json()['user']['username'], 'staff')
-        self.assertEqual(client.get('/api/students/').status_code, 200)
-        self.assertEqual(client.patch(f'/api/students/{self.student.pk}/', '{}', content_type='application/json').status_code, 403)
-        signed_out = client.post('/api/logout/', HTTP_X_CSRFTOKEN=signed_in.json()['csrfToken'])
-        self.assertEqual(signed_out.status_code, 200)
-        self.assertIsNone(signed_out.json()['user'])
-        self.assertEqual(client.get('/api/students/').status_code, 401)
-
-    def test_login_rejects_invalid_and_nonstaff_credentials(self):
-        self.client.logout()
-        for username, password, status in [('staff', 'wrong', 401), ('member', 'test-password', 403)]:
-            response = self.write('post', '/api/login/', {'username': username, 'password': password})
-            self.assertEqual(response.status_code, status)
-        self.assertEqual(self.client.get('/api/students/').status_code, 401)
 
     def test_all_resource_lists_preserve_identifiers_and_relationship_labels(self):
         score = Score.objects.create(student=self.student, teacher=self.teacher, exam=self.exam, admin=self.admin, note=17.5)
@@ -143,8 +105,8 @@ class StaffApiTests(TestCase):
         self.assertIsNone(score.teacher)
 
     def test_admin_lookup_readonly_and_missing_records(self):
-        self.assertEqual(self.write('post', '/api/admins/', {}).status_code, 405)
-        self.assertEqual(self.client.delete(f'/api/admins/{self.admin.pk}/').status_code, 405)
+        self.assertEqual(self.write('post', '/api/admins/', {}).status_code, 403)
+        self.assertEqual(self.client.delete(f'/api/admins/{self.admin.pk}/').status_code, 403)
         self.assertEqual(self.client.get('/api/students/99999/').status_code, 404)
         self.assertEqual(self.client.get('/api/unknown/').status_code, 404)
 

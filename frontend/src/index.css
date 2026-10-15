@@ -180,3 +180,13 @@ a.table-primary:hover { color: var(--blue); text-decoration: underline; }
 @media (max-width: 440px) { .form-grid, .detail-grid { grid-template-columns: 1fr; } .stats-strip { grid-template-columns: 1fr; } .stat-item { display: flex; align-items: center; justify-content: space-between; } .stat-item > strong { margin: 0; } .modal-header, .modal-body, .modal-footer { padding-left: 18px; padding-right: 18px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 @media (prefers-reduced-transparency: reduce) { .sidebar { background: #f0f4fb; backdrop-filter: none; } .login-card { background: #fff; backdrop-filter: none; } .modal::backdrop { backdrop-filter: none; } }
+/* Role workspaces reuse the readable school record surfaces. */
+.account-settings { display: flex; justify-content: flex-end; margin: -12px 0 24px; font-size: .875rem; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; }
+.dashboard-card { display: block; padding: 28px; color: var(--ink); }
+.dashboard-card:hover { border-color: var(--blue); }
+.dashboard-card h2 { margin: 0 0 12px; font-size: 1.25rem; font-weight: 650; }
+.dashboard-card p { color: var(--muted); margin: 0 0 24px; }
+.dashboard-card > span { color: var(--blue); font-weight: 600; }
+.account-active { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+.account-active input { width: 20px; height: 20px; }

@@ -4,7 +4,7 @@ import Icon from '../../../components/Icon.jsx';
 import { ErrorState, LoadingState } from '../../../components/Feedback.jsx';
 import { formPayload, initialValues, optionIdentity, resources } from '../domain/resources.js';
 
-export default function RecordForm({ resource, gateway, onSessionExpired }) {
+export default function RecordForm({ resource, gateway, onSessionExpired, basePath = '' }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const config = resources[resource];
@@ -27,17 +27,17 @@ export default function RecordForm({ resource, gateway, onSessionExpired }) {
     return () => controller.abort();
   }, [resource, id, gateway, config, onSessionExpired, revision]);
 
-  const back = id ? `/${resource}/${id}` : `/${resource}`;
+  const back = id ? `${basePath}/${resource}/${id}` : `${basePath}/${resource}`;
   return <>
     <Link className="breadcrumb" to={back}><Icon name="arrow-left" />Back to {id ? config.singular : config.title.toLowerCase()}</Link>
     <header className="page-heading"><div><p className="eyebrow">MANAGE RECORDS</p><h1 className="page-title">{id ? 'Edit' : 'Add'} {config.singular}</h1><p className="page-description">Enter the details below, then save your changes.</p></div></header>
     {state.loading ? <LoadingState /> : state.error ? <ErrorState error={state.error} onRetry={() => setRevision(revision + 1)} />
-      : <Editor config={config} resource={resource} record={state.record} options={state.options} gateway={gateway} onSessionExpired={onSessionExpired}
-        onSaved={(record) => navigate(`/${resource}/${record[config.id]}`, { replace: true, state: { notice: `${config.title.slice(0, -1)} saved successfully.` } })} back={back} />}
+      : <Editor config={config} resource={resource} record={state.record} options={state.options} gateway={gateway} basePath={basePath} onSessionExpired={onSessionExpired}
+        onSaved={(record) => navigate(`${basePath}/${resource}/${record[config.id]}`, { replace: true, state: { notice: `${config.title.slice(0, -1)} saved successfully.` } })} back={back} />}
   </>;
 }
 
-export function Editor({ config, resource, record, options, gateway, onSessionExpired, onSaved, back }) {
+export function Editor({ config, resource, record, options, gateway, onSessionExpired, onSaved, back, basePath = '' }) {
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -67,7 +67,7 @@ export function Editor({ config, resource, record, options, gateway, onSessionEx
   return <form className="panel record-form" onSubmit={submit} aria-busy={pending}>
     <div className="form-section-heading"><Icon name={config.icon} /><div><h2>{config.singular[0].toUpperCase() + config.singular.slice(1)} details</h2><p>Fields marked with * are required.</p></div></div>
     {missingSources.map((field) => <div className="error-banner" role="status" key={field.name}><p>{field.source === 'admins' ? 'An administrator record is required. Create one in Django admin first.' : `Add a ${field.label.toLowerCase()} before creating this record.`}
-      {field.source !== 'admins' && <> <Link to={`/${field.source}/new`}>Add {field.label.toLowerCase()}</Link></>}</p></div>)}
+      {field.source !== 'admins' && <> <Link to={`${basePath}/${field.source}/new`}>Add {field.label.toLowerCase()}</Link></>}</p></div>)}
     {failure && <div className="error-banner" role="alert"><div><strong>{failure.message}</strong>{Object.entries(failure.fields || {}).filter(([key]) => !config.fields.some((field) => field.name === key)).map(([key, errors]) => <p key={key}>{errors.join(' ')}</p>)}</div></div>}
     <div className="form-grid">{config.fields.map((field) => {
       const fieldError = failure?.fields?.[field.name];

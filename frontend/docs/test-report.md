@@ -88,3 +88,33 @@ submission, routes, and backend code were not changed.
 - CSS provides an opaque fallback when backdrop filtering is unavailable or
   reduced transparency is requested. Styles are scoped to `.glass-login`.
 - Final `npm run build` passed after the styling adjustments (110 modules).
+
+
+## Role-based access update — 2026-10-15
+
+Implemented custom User/profiles, role permissions, mandatory password change,
+JWT access/refresh rotation, admin account management, scoped record queries,
+CORS, React AuthContext, role routes/layouts/dashboards and account screens.
+The earlier session-only reports describe the previous version.
+
+Final checks:
+
+- `env/bin/python backend/manage.py test accounts sms.api --settings=sms.test_settings --noinput`: **17 passed**. Uses the real migration graph; includes standard existing-auth-user adoption preserving IDs, password hashes, group memberships and admin log references.
+- `env/bin/python backend/manage.py check --settings=sms.sqlite_settings`: **passed**, no issues.
+- `env/bin/python backend/manage.py makemigrations --check --dry-run --settings=sms.sqlite_settings`: **passed**, no changes detected.
+- `npm test` from frontend: **25 passed**, including role routing, persistence, refresh concurrency, failed refresh and logout during refresh.
+- `npm run build` from frontend: **passed**, 123 modules.
+- Latest completed `npm run test:e2e`: **11/12 passed**. Admin account creation/edit/deactivation, first-password change and teacher/student ownership/role routes passed in desktop/mobile Chromium. One mobile initial-login render timed out. A subsequent attempt was blocked at server startup by the host DEBUG environment variable; settings now use DJANGO_DEBUG and backend checks pass. The final browser rerun was declined, so a fully green final browser run is **not verified**.
+- Reviewed desktop teacher dashboard, mobile student dashboard and desktop account-list screenshots for navigation, text wrapping and controls.
+
+The old Group/Scores migration branches duplicated an admin column. Replacement
+migrations now allow a fresh migration; original files are retained. No schema
+changes, fixture data or account writes were applied to the configured PostgreSQL
+database. Existing installations must follow `backend/accounts/README.md`; an
+installation with partially applied legacy branches needs separate reconciliation.
+
+Security verification includes cross-role denial, unrelated object IDs, missing
+profiles, fixed account roles, atomic profile creation, password validation,
+old-token rejection after password change/deactivation, refresh rotation, logout,
+CORS allowlist and removal of legacy HTML bypass routes. This is not a full
+production security audit or cross-browser accessibility certification.
