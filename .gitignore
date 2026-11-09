@@ -18,3 +18,9 @@ sms/__pycache__/urls.cpython-312.pyc
 mini_project_SMS\Systeme-Management-Student-v2\Teachers\__pycache__
 exam/__pycache__
 env
+
+.env.*
+!.env.example
+backend/staticfiles/
+*.sqlite3
+.vercel/

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 from decouple import config
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.utils import get_random_secret_key
@@ -25,15 +26,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
+# Local development keeps its current defaults; Render defaults to staging.
+ON_RENDER = config('RENDER', default=False, cast=bool)
+DJANGO_ENV = config('DJANGO_ENV', default='staging' if ON_RENDER else 'development')
+if DJANGO_ENV not in ('development', 'staging', 'production'):
+    raise ImproperlyConfigured('DJANGO_ENV must be development, staging, or production.')
+HOSTED = ON_RENDER or DJANGO_ENV in ('staging', 'production')
+DEBUG = config('DJANGO_DEBUG', default=not HOSTED, cast=bool)
+if HOSTED and DEBUG:
+    raise ImproperlyConfigured('DJANGO_DEBUG must be False when hosted.')
 if not SECRET_KEY:
     if not DEBUG:
         raise ImproperlyConfigured('Set SECRET_KEY when DEBUG is False.')
     # Development only: tokens expire on restart unless a stable key is configured.
     SECRET_KEY = get_random_secret_key()
+if HOSTED and (len(SECRET_KEY) < 50 or SECRET_KEY.startswith(('REPLACE_', 'django-insecure-'))):
+    raise ImproperlyConfigured('Set a new random SECRET_KEY of at least 50 characters.')
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda value: [host.strip() for host in value.split(',') if host.strip()])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='' if HOSTED else 'localhost,127.0.0.1', cast=lambda value: [host.strip() for host in value.split(',') if host.strip()])
+if HOSTED and (not ALLOWED_HOSTS or any('*' in host or '://' in host for host in ALLOWED_HOSTS)):
+    raise ImproperlyConfigured('Set ALLOWED_HOSTS to the exact backend hostname, without https:// or wildcards.')
+
+# Render's proxy terminates HTTPS and supplies this header.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') if HOSTED else None
+SECURE_SSL_REDIRECT = HOSTED
+SESSION_COOKIE_SECURE = HOSTED
+CSRF_COOKIE_SECURE = HOSTED
+SECURE_HSTS_SECONDS = 3600 if HOSTED else 0
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=lambda value: [origin.strip() for origin in value.split(',') if origin.strip()])
 
 
 # Application definition
@@ -61,6 +81,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -95,15 +116,25 @@ WSGI_APPLICATION = 'sms.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASES = {
-    'default': {
+database_url = config('DATABASE_URL', default='')
+if HOSTED and not database_url:
+    raise ImproperlyConfigured('Set DATABASE_URL to the new staging database, not local DB_* credentials.')
+if database_url:
+    try:
+        database = dj_database_url.parse(database_url, conn_max_age=60, conn_health_checks=True)
+        if database['ENGINE'] != 'django.db.backends.postgresql':
+            raise ValueError
+    except (ValueError, KeyError, TypeError):
+        # Parser errors can contain credentials: return only a safe message.
+        raise ImproperlyConfigured('DATABASE_URL must be a valid PostgreSQL URL.') from None
+    if config('DB_SSL_REQUIRE', default=HOSTED and not ON_RENDER, cast=bool):
+        options = database.setdefault('OPTIONS', {})
+        if options.get('sslmode', 'require') not in ('require', 'verify-ca', 'verify-full'):
+            raise ImproperlyConfigured('An external database connection requires TLS.')
+        options.setdefault('sslmode', 'require')
+else:
+    # Preserve existing local python-decouple configuration.
+    database = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
@@ -111,7 +142,7 @@ DATABASES = {
         'HOST': config('DB_HOST', default='localhost'),
         'PORT': config('DB_PORT', default='5432'),
     }
-}
+DATABASES = {'default': database}
 
 
 
@@ -149,7 +180,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        if HOSTED else 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -174,4 +213,6 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'CHECK_REVOKE_TOKEN': True,
 }
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173,http://127.0.0.1:5173', cast=lambda value: [origin.strip() for origin in value.split(',') if origin.strip()])
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='' if HOSTED else 'http://localhost:5173,http://127.0.0.1:5173', cast=lambda value: [origin.strip() for origin in value.split(',') if origin.strip()])
+if HOSTED and (not CORS_ALLOWED_ORIGINS or any(not origin.startswith('https://') or '*' in origin for origin in CORS_ALLOWED_ORIGINS)):
+    raise ImproperlyConfigured('Set CORS_ALLOWED_ORIGINS to the exact frontend HTTPS origin.')
